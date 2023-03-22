@@ -35,7 +35,7 @@ use App\Http\Controllers\EnergySheet\EnergyZoneStatesticsController;
 |
 */
 
-Route::middleware('auth:sanctum')->prefix("user")->group(function(){
+Route::prefix("user")->middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout',[LogoutController::class,"logout"]);
     Route::get("refreshsession",[LoginController::class,"refresh_session"]);
 
