@@ -14,16 +14,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0" />
 
     <!-- Styles -->
-    @vite('resources/sass/app.scss')
+    {{-- @vite('resources/sass/app.scss') --}}
   
 
 </head>
 
 <body>
 
-    <div id="app"></div>
+    {{-- <div id="app"></div> --}}
 
-    @vite('resources/js/app.js')
+    {{-- @vite('resources/js/app.js') --}}
 
 </body>
 
