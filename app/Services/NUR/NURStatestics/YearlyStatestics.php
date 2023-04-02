@@ -166,6 +166,39 @@ class YearlyStatestics
 
 
     }
+    public function cairoModificationNUR()
+    {
+        $cairoNUR_C=$this->getNUR_C();
+        $zonesNUR_c=$this->zonesNUR_C();
+        return [
+            "cairo"=>$cairoNUR_C,
+            "zones"=>$zonesNUR_c
+        ];
+      
+
+    }
+    public function cairoPowerNUR()
+    {
+        $cairoNUR_C=$this->getNUR_C();
+        $zonesNUR_c=$this->zonesNUR_C();
+        return [
+            "cairo"=>$cairoNUR_C,
+            "zones"=>$zonesNUR_c
+        ];
+      
+
+    }
+    public function cairoNodeBNUR()
+    {
+        $cairoNUR_C=$this->getNUR_C();
+        $zonesNUR_c=$this->zonesNUR_C();
+        return [
+            "cairo"=>$cairoNUR_C,
+            "zones"=>$zonesNUR_c
+        ];
+      
+
+    }
  
     public function cairoGenNUR()
     {

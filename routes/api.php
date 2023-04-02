@@ -111,9 +111,14 @@ Route::prefix('Nur')->middleware(['auth:sanctum',"role:admin|super-admin"])->gro
     Route::get('/cairo/weekly/MWNUR/{week}/{year}',[ShowNURController::class,"cairoMWweeklyNUR"]);
     Route::get('/cairo/weekly/GenNUR/{week}/{year}',[ShowNURController::class,"cairoGenweeklyNUR"]);
     Route::get('/cairo/weekly/PowerNUR/{week}/{year}',[ShowNURController::class,"cairoPowerWeeklyNUR"]);
+    Route::get('/cairo/weekly/NodeBNUR/{week}/{year}',[ShowNURController::class,"cairoNodeBWeeklyNUR"]);
+    Route::get('/cairo/weekly/ModificationNUR/{week}/{year}',[ShowNURController::class,"cairoModificationWeeklyNUR"]);
     Route::get('/cairo/yearly/NUR_C/{year}',[ShowNURController::class,"cairoYearlyNUR_C"]);
     Route::get('/cairo/yearly/GenNUR/{year}',[ShowNURController::class,"cairoGenYearlyNUR"]);
     Route::get('/cairo/yearly/TXNUR/{year}',[ShowNURController::class,"cairoMWYearlyNUR"]);
+    Route::get('/cairo/yearly/NodeBNUR/{year}',[ShowNURController::class,"cairoNodeBYearlyNUR"]);
+    Route::get('/cairo/yearly/PowerNUR/{year}',[ShowNURController::class,"cairoPowerYearlyNUR"]);
+    Route::get('/cairo/yearly/ModificationNUR/{year}',[ShowNURController::class,"cairoModificationYearlyNUR"]);
 
 });
 
