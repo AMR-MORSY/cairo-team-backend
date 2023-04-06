@@ -415,6 +415,36 @@ class ShowNURController extends Controller
 
     public function cairoModificationWeeklyNUR($week,$year)
     {
+        $data = [
+
+            "week" => $week,
+            "year" => $year
+        ];
+        $validator = Validator::make($data, ["week" => ["required", 'integer', "between:1,52"], "year" => ['required', 'regex:/^2[0-9]{3}$/']]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->getMessageBag()->toArray()
+            ], 422);
+        } else {
+            $validated = $validator->validated();
+
+            $NUR2G_tickets = NUR2G::where("week", $validated["week"])->where("year", $validated['year'])->where("system", "production")->get();
+            $NUR3G_tickets = NUR3G::where("week", $validated["week"])->where("year", $validated['year'])->where("system", "production")->get();
+            $NUR4G_tickets = NUR4G::where("week", $validated["week"])->where("year", $validated['year'])->where("system", "production")->get();
+
+            $network_2g_cells = $NUR2G_tickets->whereStrict("technology", "2G")->first()->network_cells;
+            $network_3g_cells = $NUR3G_tickets->whereStrict("technology", "3G")->first()->network_cells;
+            $network_4g_cells = $NUR4G_tickets->whereStrict("technology", "4G")->first()->network_cells;
+            $statestics=$this->cairoMainPowerWeeklyStatestics($NUR2G_tickets,$NUR3G_tickets,$NUR4G_tickets,$network_2g_cells,$network_3g_cells,$network_4g_cells);
+            $tickets = $this->formArrayOfTickets($NUR2G_tickets, $NUR3G_tickets, $NUR4G_tickets);
+          $sites = $this->getImpactedSites($tickets, $network_2g_cells,  $network_3g_cells,  $network_4g_cells);
+          return response()->json([
+              "statestics"=>$statestics,
+              "tickets"=>$tickets,
+              "sites"=>$sites
+          ],200);
+        }
+
 
     }
 

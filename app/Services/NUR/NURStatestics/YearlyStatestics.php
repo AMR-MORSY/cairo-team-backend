@@ -170,9 +170,10 @@ class YearlyStatestics
     {
         $cairoNUR_C=$this->getNUR_C();
         $zonesNUR_c=$this->zonesNUR_C();
+        
         return [
             "cairo"=>$cairoNUR_C,
-            "zones"=>$zonesNUR_c
+            "zones"=> $zonesNUR_c
         ];
       
 

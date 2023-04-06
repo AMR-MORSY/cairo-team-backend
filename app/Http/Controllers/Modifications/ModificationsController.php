@@ -124,7 +124,7 @@ class ModificationsController extends Controller
             "site_code" => "required|exists:modifications,site_code",
             "site_name" => "required|exists:modifications,site_name",
             "requester" => "required|exists:modifications,requester",
-            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|MERG$/"],
+            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|HAS|MERG$/"],
             "request_date" => "required|date",
             "finish_date" => "nullable|date",
             "status" => ["required", "regex:/^waiting D6|done|in progress$/"],
