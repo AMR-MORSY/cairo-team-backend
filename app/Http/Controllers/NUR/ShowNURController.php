@@ -218,7 +218,7 @@ class ShowNURController extends Controller
         } else {
            
             $statestics = new YearlyStatestics($total_year_tickets_2G, $total_year_tickets_3G, $total_year_tickets_4G,$year);
-            $NUR_Gen_yearly=$statestics->cairoTxNUR();
+             $NUR_Gen_yearly=$statestics->cairoTxNUR();
             return response()->json([
                 "NUR_C_yearly"=>$NUR_Gen_yearly
             ],200);

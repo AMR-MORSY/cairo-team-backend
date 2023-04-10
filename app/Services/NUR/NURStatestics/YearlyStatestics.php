@@ -60,7 +60,7 @@ class YearlyStatestics
                     $network_3g_cells=$network_3g_cells->network_cells;
                 }
                 else{
-                    $network_2g_cells=0;
+                    $network_3g_cells=0;
                 }
 
                 $network_4g_cells=$tickets->where("technology","4G")->first();
@@ -72,9 +72,9 @@ class YearlyStatestics
                     $network_4g_cells=0;
                 }
              
-              
-                $NUR_week_c["week $week"]=$this->weekNUR_C( $tickets, $network_2g_cells, $network_3g_cells, $network_4g_cells);
-
+              $tickets=collect($tickets);
+                  $NUR_week_c["week $week"]=$this->weekNUR_C( $tickets, $network_2g_cells, $network_3g_cells, $network_4g_cells);
+                //  $NUR_week_c["week $week"]=$network_2g_cells;
             }
 
             
@@ -89,7 +89,8 @@ class YearlyStatestics
         $NUR_2G_sum = $tickets->where("technology","2G")->sum("nur");
         $NUR_3G_sum =  $tickets->where("technology","3G")->sum("nur");
         $NUR_4G_sum = $tickets->where("technology","4G")->sum("nur");
-        $combined = (($NUR_2G_sum * $network_2g_cells) + ($NUR_3G_sum * $network_3g_cells) + ($NUR_4G_sum * $network_4g_cells)) / ($network_4g_cells + $network_3g_cells + $network_2g_cells);
+         $combined = (($NUR_2G_sum * $network_2g_cells) + ($NUR_3G_sum * $network_3g_cells) + ($NUR_4G_sum * $network_4g_cells))/($network_4g_cells + $network_3g_cells + $network_2g_cells);
+        //  $combined =  $NUR_2G_sum /1;
         $NUR_combined = number_format($combined, 2, '.', ',');
 
         return $NUR_combined;
@@ -155,11 +156,11 @@ class YearlyStatestics
 
     public function cairoTxNUR()
     {
-        $cairoNUR_C=$this->getNUR_C();
-        $zonesNUR_c=$this->zonesNUR_C();
+         $cairoNUR_C=$this->getNUR_C();
+         $zonesNUR_c=$this->zonesNUR_C();
         return [
             "cairo"=>$cairoNUR_C,
-            "zones"=>$zonesNUR_c
+             "zones"=>$zonesNUR_c
         ];
       
 
