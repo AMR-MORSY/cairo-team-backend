@@ -20,7 +20,7 @@ return new class extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
             $table->string('site_name');
-            $table->enum('subcontractor',['','OT','Alandick','Tri-Tech','Siatnile','Merc','GP','Systel','MBV','TELE-TECH','SAG','LM',"Red Tech","HAS","MERG"]);
+            $table->enum('subcontractor',['','OT','Alandick','Tri-Tech','Siatnile','Merc','GP','Systel','MBV','TELE-TECH','SAG','LM',"Red Tech","HAS","MERG","STEPS","H-PLUS"]);
             $table->enum('requester',['','Acquisition','Civil Team','Maintenance','Radio','rollout','Transmission','GA','Soc','Sharing team']);
             $table->text('action');
             $table->enum('status',['in progress','done','waiting D6'])->default("in progress");
