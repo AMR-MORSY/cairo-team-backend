@@ -182,6 +182,9 @@ export default {
         "LM",
         "HAS",
         "Red Tech",
+        "STEPS",
+        "H-PLUS",
+        "MERG"
       ],
       request_date: null,
       request_dateError: false,

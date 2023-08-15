@@ -181,7 +181,11 @@ export default {
         "TELE-TECH",
         "SAG",
         "LM",
+        "HAS",
         "MERG",
+        "STEPS",
+        "H-PLUS",
+        "Red Tech"
       ],
       request_date: null,
       request_dateError: false,

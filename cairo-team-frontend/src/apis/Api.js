@@ -7,6 +7,7 @@ let Api = axios.create({
   
     headers: {
         "Content-Type": "application/json",
+        "Authorization":`Bearer ${store.getters.token}`
       
        
         
@@ -15,6 +16,9 @@ let Api = axios.create({
 });
 
 Api.defaults.withCredentials = true;
+// Api.defaults.headers.common[
+//     "Authorization"
+//   ] = `Bearer ${store.getters.token}`;
 Api.defaults.baseURL= import.meta.env.VITE_BASE_URL;
 
 Api.interceptors.response.use(

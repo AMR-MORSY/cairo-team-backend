@@ -16,9 +16,11 @@ const store = createStore({
     token(state) {
      
       if (state.userData) {
+        console.log(state.userData)
         let userToken = state.userData.token.plainTextToken;
         return userToken;
       } else {
+        console.log("nuuuul")
         let userToken = null;
 
         return userToken;
