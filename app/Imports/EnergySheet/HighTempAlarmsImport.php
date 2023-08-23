@@ -70,9 +70,9 @@ class HightempAlarmsImport implements ToModel ,WithHeadingRow ,WithBatchInserts 
         return [
             "*.Site Code" => ["required",  "regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))$/"],
             "*.Site Name" => ["required", "regex:/^([0-9a-zA-Z_-]|\s){3,60}$/"],
-            "*.BSC Name" => ["required", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
+            "*.BSC Name" => ["required", "string"],
             "*.Area" => ["required", "regex:/^[0-9a-zA-Z_-]{3,50}$/"],
-            "*.Alarm Name" => ["required", "regex:/^(Shelter High Temperature)$/"],
+            "*.Alarm Name" => ["required", "string"],
             "*.Occurred On(Date)" => ["required", 'date'],
            
             "*.Cleared On(Date)" => ["required","date"],

@@ -99,14 +99,6 @@ class PowerAlarmsHelpers
             $countSites = $this->powerAlarmsCollection->where("operational_zone", $zone)->where("duration", "<", 60)->count();
             $durations['count'] = $countSites;
 
-            // foreach ($sites as  $site) {
-
-
-            //     $subs["siteName"] =  $site->site_name;
-            //     $subs["siteCode"] =  $site->site_code;
-            //     $subs["duration"] =  $site->duration;
-            //     array_push($durations, $subs);
-            // }
             $oz[$zone] = $durations;
         }
 
@@ -115,9 +107,6 @@ class PowerAlarmsHelpers
     }
     public function zonesDownSitesAfterPowerAlarm($zones)
     {
-        // $oz = [];
-
-        // foreach ($zones as $zone) {
         $sites = [];
         $siteCodes = $this->powerAlarmsCollection->where("operational_zone", "Cairo South")->groupBy("site_code");
         $downAlarms = $this->downAlarmsCollection->where("operational_zone", "Cairo South");

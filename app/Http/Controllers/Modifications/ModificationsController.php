@@ -124,7 +124,7 @@ class ModificationsController extends Controller
             "site_code" => "required|exists:modifications,site_code",
             "site_name" => "required|exists:modifications,site_name",
             "requester" => "required|exists:modifications,requester",
-            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|HAS|MERG|H-PLUS|STEPS$/"],
+            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|HAS|MERG|H-PLUS|STEPS|GTE|AFRO|Benaya|EEC|Egypt Gate|Huawei|INTEGRA|Unilink$/"],
             "request_date" => "required|date",
             "finish_date" => "nullable|date",
             "status" => ["required", "regex:/^waiting D6|done|in progress$/"],
@@ -238,14 +238,11 @@ class ModificationsController extends Controller
 
     public function newModification(Request $request)
     {
-        // $data=json_encode($request->all(),true);
-        // // return response(
-        // //     $data
-        // // );
+        
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
             "site_name" => "required|exists:sites,site_name",
-            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|HAS|Red Tech|MERG|H-PLUS|STEPS$/"],
+            "subcontractor" => ["required", "regex:/^OT|Alandick|Tri-Tech|Siatnile|Merc|GP|MBV|Systel|TELE-TECH|SAG|LM|HAS|MERG|H-PLUS|STEPS|GTE|AFRO|Benaya|EEC|Egypt Gate|Huawei|INTEGRA|Unilink$/"],
             "requester" => ["required", "regex:/^Acquisition|Civil Team|Maintenance|Radio|Transmission|rollout|GA|Sharing team$/"],
             "project" => ["required", "regex:/^Normal Modification|LTE|Critical repair|Repair|LDN|Retrofitting|Adding sec|NTRA|Sharing|L2600$/"],
             "action" => "required|string",
