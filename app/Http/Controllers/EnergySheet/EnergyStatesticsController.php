@@ -10,8 +10,6 @@ use App\Models\EnergySheet\PowerAlarm;
 use App\Models\EnergySheet\HighTempAlarm;
 use Illuminate\Support\Facades\Validator;
 use App\Services\EnergyAlarms\WeeklyStatestics;
-use App\Services\EnergyAlarms\MonthlyStatestics;
-use App\Services\EnergyAlarms\WeekMonthFunctions;
 
 
 class EnergyStatesticsController extends Controller
@@ -98,43 +96,45 @@ class EnergyStatesticsController extends Controller
         }
         else
         {
-            $statestics=new WeekMonthFunctions($powerAlarms,$genAlrms,$HT,$downAlarms,$week);
-            $zonesPowerAlarmsCount=$statestics->zonesPowerAlarmsCount();
-            $zonesSitesReportedPowerAlarms=$statestics->zonesSitesReportedPowerAlarms();
-            $zonesHighiestPowerAlarmDuration=$statestics->zonesHighiestPowerAlarmDuration();
-            $zonesPowerDurationLessThanHour=$statestics->zonesPowerDurationLessThanHour();
-            $zonesSitesPowerAlarmsMoreThan=$statestics->zonesSitesPowerAlarmsMoreThan();
-            $zonesDownSitesAfterPowerAlarm=$statestics->zonesDownSitesAfterPowerAlarm();
-            // $zonesSitesDownWithoutPowerAlarms=$statestics->sitesDownWithoutPowerAlarms();
+            $statestics=new WeeklyStatestics($powerAlarms,$genAlrms,$HT,$downAlarms);
+             $zonesPowerAlarmsCount=$statestics->zonesPowerAlarmsCount();
+             $zonesSitesReportedPowerAlarms=$statestics->zonesSitesReportedPowerAlarms();
+            //  $zonesHighiestPowerAlarmDuration=$statestics->zonesHighiestPowerAlarmDuration();
+            //  $zonesPowerDurationLessThanHour=$statestics->zonesPowerDurationLessThanHour();
+            // $zonesSitesPowerAlarmsMoreThan=$statestics->zonesSitesPowerAlarmsMoreThan();
+            //  $zonesDownSitesAfterPowerAlarm=$statestics->zonesDownSitesAfterPowerAlarm();
+            //   $zonesSitesDownWithoutPowerAlarms=$statestics->zonesSitesDownWithoutPowerAlarms();
+
+              $zonesDownAlarmsCount=$statestics->zonesDownAlarmsCount();
+        
 
 
-            $zonesHTAlarmsCount=$statestics->zonesHTAlarmsCount();
-            $zonesSitesReportedHTAlarms=$statestics->zonesSitesReportedHTAlarms();
-            $zonesSitesReportedHTAlarmsDetails=$statestics->zonesSitesReportedHTAlarmsDetails();
-
+             $zonesHTAlarmsCount=$statestics->zonesHTAlarmsCount();
+             $zonesSitesReportedHTAlarms=$statestics->zonesSitesReportedHTAlarms();
+          
 
             $zonesGenAlarmsCount=$statestics->zonesGenAlarmsCount();
             $zonesSitesReportedGenAlarms=$statestics->zonesSitesReportedGenAlarms();
-            $zonesSitesReportedGenAlarmsDetails=$statestics->zonesSitesReportedGenAlarmsDetails();
-
+           
             $data["period"]="week";
             $data["period_No"]=$week;
-            $data['zonesPowerAlarmsCount']=$zonesPowerAlarmsCount;
-            $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
-            $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
-            $data['zonesHighiestPowerAlarmDuration']=$zonesHighiestPowerAlarmDuration;
-            $data['zonesPowerDurationLessThanHour']=$zonesPowerDurationLessThanHour;
-            $data['zonesSitesPowerAlarmsMoreThan2Times']=$zonesSitesPowerAlarmsMoreThan;
-            $data['zonesDownSitesAfterPowerAlarm']=$zonesDownSitesAfterPowerAlarm;
-            // $data['zonesSitesDownWithoutPowerAlarms']= $zonesSitesDownWithoutPowerAlarms;
+             $data['zonesPowerAlarmsCount']=$zonesPowerAlarmsCount;
+             $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
+            // $data['zonesHighiestPowerAlarmDuration']=$zonesHighiestPowerAlarmDuration;
+            //  $data['zonesPowerDurationLessThanHour']=$zonesPowerDurationLessThanHour;
+            // $data['zonesSitesPowerAlarmsMoreThan2Times']=$zonesSitesPowerAlarmsMoreThan;
+            //  $data['zonesDownSitesAfterPowerAlarm']=$zonesDownSitesAfterPowerAlarm;
+            //  $data['zonesSitesDownWithoutPowerAlarms']= $zonesSitesDownWithoutPowerAlarms;
 
-            $data["zonesHTAlarmsCount"]=$zonesHTAlarmsCount;
-            $data['zonesSitesReportedHTAlarms']=$zonesSitesReportedHTAlarms;
-            $data['zonesSitesReportedHTAlarmsDetails']=$zonesSitesReportedHTAlarmsDetails;
+             $data['zonesDownAlarmsCount']=$zonesDownAlarmsCount;
+         
+
+             $data["zonesHTAlarmsCount"]=$zonesHTAlarmsCount; 
+             $data['zonesSitesReportedHTAlarms']=$zonesSitesReportedHTAlarms;
 
             $data["zonesGenAlarmsCount"]=$zonesGenAlarmsCount;
             $data['zonesSitesReportedGenAlarms']= $zonesSitesReportedGenAlarms;
-            $data['zonesSitesReportedGenAlarmsDetails']=$zonesSitesReportedGenAlarmsDetails;
+          
 
             $notFound['error']=false;
             $notFound['statestics']=$data;
@@ -145,86 +145,86 @@ class EnergyStatesticsController extends Controller
 
     }
      
-    private function getMonthlyAlarms($month,$year)
-    {
-        $powerAlarms=PowerAlarm::where("month",$month)->where('year',$year)->get();
-        $genAlrms=GenAlarm::where("month",$month)->where('year',$year)->get();
-        $HT=HighTempAlarm::where("month",$month)->where('year',$year)->get();
-        $downAlarms=DownAlarm::where("month",$month)->where('year',$year)->get();
-        $errors=[];
-        if(count( $powerAlarms)<=0)
-        {
-             array_push($errors,"Power Alarms does not exist");
-        }
-        if(count($genAlrms)<=0)
-        {
-             array_push($errors,"Gen Alarms does not exist");
-        }
-        if(count($HT)<=0)
-        {
-             array_push($errors,"High Temp Alarms does not exist");
-        }
-        if(count( $downAlarms)<=0)
-        {
-            array_push($errors,"Down Alarms does not exist");
+    // private function getMonthlyAlarms($month,$year)
+    // {
+    //     $powerAlarms=PowerAlarm::where("month",$month)->where('year',$year)->get();
+    //     $genAlrms=GenAlarm::where("month",$month)->where('year',$year)->get();
+    //     $HT=HighTempAlarm::where("month",$month)->where('year',$year)->get();
+    //     $downAlarms=DownAlarm::where("month",$month)->where('year',$year)->get();
+    //     $errors=[];
+    //     if(count( $powerAlarms)<=0)
+    //     {
+    //          array_push($errors,"Power Alarms does not exist");
+    //     }
+    //     if(count($genAlrms)<=0)
+    //     {
+    //          array_push($errors,"Gen Alarms does not exist");
+    //     }
+    //     if(count($HT)<=0)
+    //     {
+    //          array_push($errors,"High Temp Alarms does not exist");
+    //     }
+    //     if(count( $downAlarms)<=0)
+    //     {
+    //         array_push($errors,"Down Alarms does not exist");
 
-        }
-        if(count($errors)>0)
-        {
-            $notFound["error"]=true;
-            $notFound["errors"]=$errors;
-            return $notFound;
-        }
-        else
-        {
-            $statestics=new WeekMonthFunctions($powerAlarms,$genAlrms,$HT,$downAlarms,null,$month);
-            $zonesPowerAlarmsCount=$statestics->zonesPowerAlarmsCount();
-            $zonesSitesReportedPowerAlarms=$statestics->zonesSitesReportedPowerAlarms();
-            $zonesHighiestPowerAlarmDuration=$statestics->zonesHighiestPowerAlarmDuration();
-            $zonesPowerDurationLessThanHour=$statestics->zonesPowerDurationLessThanHour();
-            $zonesSitesPowerAlarmsMoreThan=$statestics->zonesSitesPowerAlarmsMoreThan();
-            $zonesDownSitesAfterPowerAlarm=$statestics->zonesDownSitesAfterPowerAlarm();
-            // $zonesSitesDownWithoutPowerAlarms=$statestics->sitesDownWithoutPowerAlarms();
-
-
-            $zonesHTAlarmsCount=$statestics->zonesHTAlarmsCount();
-            $zonesSitesReportedHTAlarms=$statestics->zonesSitesReportedHTAlarms();
-            $zonesSitesReportedHTAlarmsDetails=$statestics->zonesSitesReportedHTAlarmsDetails();
+    //     }
+    //     if(count($errors)>0)
+    //     {
+    //         $notFound["error"]=true;
+    //         $notFound["errors"]=$errors;
+    //         return $notFound;
+    //     }
+    //     else
+    //     {
+    //         $statestics=new WeekMonthFunctions($powerAlarms,$genAlrms,$HT,$downAlarms,null,$month);
+    //         $zonesPowerAlarmsCount=$statestics->zonesPowerAlarmsCount();
+    //         $zonesSitesReportedPowerAlarms=$statestics->zonesSitesReportedPowerAlarms();
+    //         $zonesHighiestPowerAlarmDuration=$statestics->zonesHighiestPowerAlarmDuration();
+    //         $zonesPowerDurationLessThanHour=$statestics->zonesPowerDurationLessThanHour();
+    //         $zonesSitesPowerAlarmsMoreThan=$statestics->zonesSitesPowerAlarmsMoreThan();
+    //         $zonesDownSitesAfterPowerAlarm=$statestics->zonesDownSitesAfterPowerAlarm();
+    //         // $zonesSitesDownWithoutPowerAlarms=$statestics->sitesDownWithoutPowerAlarms();
 
 
-            $zonesGenAlarmsCount=$statestics->zonesGenAlarmsCount();
-            $zonesSitesReportedGenAlarms=$statestics->zonesSitesReportedGenAlarms();
-            $zonesSitesReportedGenAlarmsDetails=$statestics->zonesSitesReportedGenAlarmsDetails();
-
-            $data["period"]="month";
-            $data["period_No"]=$month;
-            $data['zonesPowerAlarmsCount']=$zonesPowerAlarmsCount;
-            $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
-            $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
-            $data['zonesHighiestPowerAlarmDuration']=$zonesHighiestPowerAlarmDuration;
-            $data['zonesPowerDurationLessThanHour']=$zonesPowerDurationLessThanHour;
-            $data['zonesSitesPowerAlarmsMoreThan2Times']=$zonesSitesPowerAlarmsMoreThan;
-            $data['zonesDownSitesAfterPowerAlarm']=$zonesDownSitesAfterPowerAlarm;
-            // $data['zonesSitesDownWithoutPowerAlarms']= $zonesSitesDownWithoutPowerAlarms;
-
-            $data["zonesHTAlarmsCount"]=$zonesHTAlarmsCount;
-            $data['zonesSitesReportedHTAlarms']=$zonesSitesReportedHTAlarms;
-            $data['zonesSitesReportedHTAlarmsDetails']=$zonesSitesReportedHTAlarmsDetails;
-
-            $data["zonesGenAlarmsCount"]=$zonesGenAlarmsCount;
-            $data['zonesSitesReportedGenAlarms']= $zonesSitesReportedGenAlarms;
-            $data['zonesSitesReportedGenAlarmsDetails']=$zonesSitesReportedGenAlarmsDetails;
-
-            $notFound['error']=false;
-            $notFound['statestics']=$data;
-
-            return $notFound;
+    //         $zonesHTAlarmsCount=$statestics->zonesHTAlarmsCount();
+    //         $zonesSitesReportedHTAlarms=$statestics->zonesSitesReportedHTAlarms();
+    //         $zonesSitesReportedHTAlarmsDetails=$statestics->zonesSitesReportedHTAlarmsDetails();
 
 
-        }
+    //         $zonesGenAlarmsCount=$statestics->zonesGenAlarmsCount();
+    //         $zonesSitesReportedGenAlarms=$statestics->zonesSitesReportedGenAlarms();
+    //         $zonesSitesReportedGenAlarmsDetails=$statestics->zonesSitesReportedGenAlarmsDetails();
+
+    //         $data["period"]="month";
+    //         $data["period_No"]=$month;
+    //         $data['zonesPowerAlarmsCount']=$zonesPowerAlarmsCount;
+    //         $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
+    //         $data['zonesSitesReportedPowerAlarms']=$zonesSitesReportedPowerAlarms;
+    //         $data['zonesHighiestPowerAlarmDuration']=$zonesHighiestPowerAlarmDuration;
+    //         $data['zonesPowerDurationLessThanHour']=$zonesPowerDurationLessThanHour;
+    //         $data['zonesSitesPowerAlarmsMoreThan2Times']=$zonesSitesPowerAlarmsMoreThan;
+    //         $data['zonesDownSitesAfterPowerAlarm']=$zonesDownSitesAfterPowerAlarm;
+    //         // $data['zonesSitesDownWithoutPowerAlarms']= $zonesSitesDownWithoutPowerAlarms;
+
+    //         $data["zonesHTAlarmsCount"]=$zonesHTAlarmsCount;
+    //         $data['zonesSitesReportedHTAlarms']=$zonesSitesReportedHTAlarms;
+    //         $data['zonesSitesReportedHTAlarmsDetails']=$zonesSitesReportedHTAlarmsDetails;
+
+    //         $data["zonesGenAlarmsCount"]=$zonesGenAlarmsCount;
+    //         $data['zonesSitesReportedGenAlarms']= $zonesSitesReportedGenAlarms;
+    //         $data['zonesSitesReportedGenAlarmsDetails']=$zonesSitesReportedGenAlarmsDetails;
+
+    //         $notFound['error']=false;
+    //         $notFound['statestics']=$data;
+
+    //         return $notFound;
 
 
-    }
+    //     }
+
+
+    // }
     // public function siteAlarms(Request $request)
     // {
     //     $validator = Validator::make($request->all(), ["siteCode" => ["required", "regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))$/"]]);

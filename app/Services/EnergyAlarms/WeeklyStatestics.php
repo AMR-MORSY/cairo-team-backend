@@ -1,21 +1,22 @@
 <?php
 
 namespace App\Services\EnergyAlarms;
-
+use App\Services\EnergyAlarms\HTAlarmsHelpers;
+use App\Services\EnergyAlarms\GenAlarmsHelpers;
+use App\Services\EnergyAlarms\DownAlarmsHelpers;
+use App\Services\EnergyAlarms\PowerAlarmsHelpers;
 
 
 class WeeklyStatestics
 {
-
-
-    protected $powerAlarms, $genAlarms, $HTAlarms, $downAlarms,$week;
-    public function __construct($powerAlarms, $genAlarms, $HTAlarms, $downAlarms,$week)
+    protected $powerAlarms, $genAlarms, $HTAlarms, $downAlarms;
+    public function __construct($powerAlarms, $genAlarms, $HTAlarms, $downAlarms)
     {
         $this->powerAlarms = $powerAlarms;
         $this->genAlarms = $genAlarms;
         $this->HTAlarms = $HTAlarms;
         $this->downAlarms = $downAlarms;
-        $this->week=$week;
+       
     }
 
     public function zonesPowerAlarmsCount()
@@ -43,6 +44,17 @@ class WeeklyStatestics
          $zonesHTAlarmsCount=$HTAlarmsStatestics->zonesHTAlarmsCount($this->HTAlarms->groupBy('operational_zone')->keys());
          return $zonesHTAlarmsCount;
     }
+
+    public function zonesDownAlarmsCount()
+    {
+        $downAlarmsStatestics=new DownAlarmsHelpers($this->downAlarms);
+        $zonesDownAlarmsCount=$downAlarmsStatestics->zonesDownAlarmsCount($this->downAlarms->groupBy('operational_zone')->keys());
+        return  $zonesDownAlarmsCount;
+
+    }
+
+
+
     public function zonesSitesReportedPowerAlarms()
     {
         $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
@@ -70,49 +82,49 @@ class WeeklyStatestics
         return   $zonesSitesReportedHTAlarms;
     }
 
-    public function zonesSitesReportedHTAlarmsDetails()
-    {   $HTAlarmsStatestics = new HTAlarmsHelpers($this->HTAlarms);
-        $zonesSitesReportedHTAlarmsDetails =$HTAlarmsStatestics->zonesSitesReportedHTAlarmsDetails($this->HTAlarms->groupBy("operational_zone")->keys());
-        return $zonesSitesReportedHTAlarmsDetails;
+   
 
-    }
+  
+    // public function zonesSitesPowerAlarmsMoreThan()
+    // {
+    //     $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
+    //     $zonesSitesPowerAlarmsMoreThan = $powerAlarmsStatestics->zonesSitesPowerAlarmsMoreThan($this->powerAlarms->groupBy("operational_zone")->keys(),2);
+    //     return $zonesSitesPowerAlarmsMoreThan;
+    // }
+    // public function zonesHighiestPowerAlarmDuration()
+    // {
+    //     $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
+    //     $zonesHighiestPowerAlarmDuration = $powerAlarmsStatestics->zonesHighiestAlarmDuration($this->powerAlarms->groupBy("operational_zone")->keys());
+    //     return   $zonesHighiestPowerAlarmDuration;
+    // }
+    // public function zonesPowerDurationLessThanHour()
+    // {
+    //     $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
+    //     $zonesPowerDurationLessThanHour = $powerAlarmsStatestics->zonesPowerDurationLessThanHour($this->powerAlarms->groupBy("operational_zone")->keys());
+    //     return  $zonesPowerDurationLessThanHour;
+    // }
+    // public function zonesDownSitesAfterPowerAlarm()
+    // {
+    //     $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms, $this->downAlarms);
+    //     $zonesDownSitesAfterPowerAlarm = $powerAlarmsStatestics->zonesDownSitesAfterPowerAlarm($this->powerAlarms->groupBy("operational_zone")->keys());
+    //     return   $zonesDownSitesAfterPowerAlarm;
+    // }
 
-    public function zonesSitesReportedGenAlarmsDetails()
-    {     $genAlarmsStatestics = new GenAlarmsHelpers($this->genAlarms);
-        $zonesSitesReportedGenAlarmsDetails = $genAlarmsStatestics->zonesSitesReportedGenAlarmsDetails($this->genAlarms->groupBy("operational_zone")->keys());
-        return  $zonesSitesReportedGenAlarmsDetails ;
+//    public function zonesSitesDownWithoutPowerAlarms()
+//    {
+//     $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms, $this->downAlarms);
+//     $zonessitesDownWithoutPowerAlarms = $powerAlarmsStatestics->zonesSitesDownWithoutPowerAlarms($this->powerAlarms->groupBy("operational_zone")->keys());
+//     return  $zonessitesDownWithoutPowerAlarms;
 
-    }
-    public function zonesSitesPowerAlarmsMoreThan()
-    {
-        $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
-        $zonesSitesPowerAlarmsMoreThan = $powerAlarmsStatestics->zonesSitesPowerAlarmsMoreThan($this->powerAlarms->groupBy("operational_zone")->keys(),2);
-        return $zonesSitesPowerAlarmsMoreThan;
-    }
-    public function zonesHighiestPowerAlarmDuration()
-    {
-        $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
-        $zonesHighiestPowerAlarmDuration = $powerAlarmsStatestics->zonesHighiestAlarmDuration($this->powerAlarms->groupBy("operational_zone")->keys());
-        return   $zonesHighiestPowerAlarmDuration;
-    }
-    public function zonesPowerDurationLessThanHour()
-    {
-        $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms);
-        $zonesPowerDurationLessThanHour = $powerAlarmsStatestics->zonesPowerDurationLessThanHour($this->powerAlarms->groupBy("operational_zone")->keys());
-        return  $zonesPowerDurationLessThanHour;
-    }
-    public function zonesDownSitesAfterPowerAlarm()
-    {
-        $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms, $this->downAlarms);
-        $zonesDownSitesAfterPowerAlarm = $powerAlarmsStatestics->zonesDownSitesAfterPowerAlarm($this->powerAlarms->groupBy("operational_zone")->keys());
-        return   $zonesDownSitesAfterPowerAlarm;
-    }
+//    }
+//    public function zonesSitesReportedDownAlarms()
+//    {
+//     $downAlarmsStatestics=new DownAlarmsHelpers($this->downAlarms);
+//     $zonesSitesDownAlarms=$downAlarmsStatestics->zonesSitesReportedDownAlarms($this->downAlarms->groupBy("operational_zone")->keys());
+//     return $zonesSitesDownAlarms;
 
-   public function sitesDownWithoutPowerAlarms()
-   {
-    $powerAlarmsStatestics = new PowerAlarmsHelpers($this->powerAlarms, $this->downAlarms,$this->week);
-    $zonessitesDownWithoutPowerAlarms = $powerAlarmsStatestics->sitesDownWithoutPowerAlarms($this->powerAlarms->groupBy("operational_zone")->keys());
-    return  $zonessitesDownWithoutPowerAlarms;
+//    }
 
-   }
+
+
 }

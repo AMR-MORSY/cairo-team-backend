@@ -7,13 +7,13 @@ namespace App\Services\EnergyAlarms;
 class HTAlarmsHelpers{
 
 
-    protected $HTAlarmsCollection,$downAlarmsCollection,$week;
+    protected $HTAlarmsCollection;
 
-    public function __construct($HTAlarms,$downAlarms = null,$week = null)
+    public function __construct($HTAlarms)
     {
         $this->HTAlarmsCollection=$HTAlarms;
-        $this->downAlarmsCollection=$downAlarms;
-        $this->week = $week;
+       
+     
         
     }
 
@@ -23,28 +23,19 @@ class HTAlarmsHelpers{
         foreach ($zones as $zone) {
             $oz[$zone] = $this->HTAlarmsCollection->where("operational_zone", $zone)->count();
         }
+        $totalAlarms=0;
+        foreach($oz as $key=>$zone)
+        {
+            $totalAlarms=$totalAlarms+$zone;
+        }
+     
+        $oz['Cairo']=$totalAlarms;
+
 
         return $oz;
     }
 
     public function zonesSitesReportedAlarms($zones)
-    {
-        $oz = [];
-        foreach ($zones as $zone) {
-            $siteCodes = $this->HTAlarmsCollection->where("operational_zone", $zone)->groupBy("site_code")->count();
-            $oz[$zone] = $siteCodes;
-        }
-        return $oz;
-    }
-
-
-    private function convertMinutesToHours($minutes)
-    {
-        $quotient = (int)($minutes / 60);
-        $remainder = $minutes % 60;
-        return " $quotient:$remainder";
-    }
-    public function zonesSitesReportedHTAlarmsDetails($zones)
     {
         $oz = [];
 
@@ -68,5 +59,14 @@ class HTAlarmsHelpers{
 
         return $oz;
     }
+
+
+    public static function convertMinutesToHours($minutes)
+    {
+        $quotient = (int)($minutes / 60);
+        $remainder = $minutes % 60;
+        return " $quotient:$remainder";
+    }
+   
 
 }

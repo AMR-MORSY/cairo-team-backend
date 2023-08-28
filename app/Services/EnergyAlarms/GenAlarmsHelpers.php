@@ -5,12 +5,12 @@ namespace App\Services\EnergyAlarms;
 
 class GenAlarmsHelpers{
 
-    protected $GenAlarmsCollection,$week;
+    protected $GenAlarmsCollection;
 
-    public function __construct($GenAlarms,$week = null)
+    public function __construct($GenAlarms)
     {
         $this->GenAlarmsCollection=$GenAlarms;
-        $this->week = $week;
+      
         
     }
 
@@ -20,26 +20,17 @@ class GenAlarmsHelpers{
         foreach ($zones as $zone) {
             $oz[$zone] = $this->GenAlarmsCollection->where("operational_zone", $zone)->count();
         }
+        $totalAlarms=0;
+        foreach($oz as $key=>$zone)
+        {
+            $totalAlarms=$totalAlarms+$zone;
+        }
+     
+        $oz['Cairo']=$totalAlarms;
 
         return $oz;
     }
     public function zonesSitesReportedAlarms($zones)
-    {
-        $oz = [];
-        foreach ($zones as $zone) {
-            $siteCodes = $this->GenAlarmsCollection->where("operational_zone", $zone)->groupBy("site_code")->count();
-            $oz[$zone] = $siteCodes;
-        }
-        return $oz;
-    }
-    private function convertMinutesToHours($minutes)
-    {
-        $quotient = (int)($minutes / 60);
-        $remainder = $minutes % 60;
-        return " $quotient:$remainder";
-    }
-
-    public function zonesSitesReportedGenAlarmsDetails($zones)
     {
         $oz = [];
 
@@ -63,5 +54,12 @@ class GenAlarmsHelpers{
 
         return $oz;
     }
+    private function convertMinutesToHours($minutes)
+    {
+        $quotient = (int)($minutes / 60);
+        $remainder = $minutes % 60;
+        return " $quotient:$remainder";
+    }
 
+    
 }
