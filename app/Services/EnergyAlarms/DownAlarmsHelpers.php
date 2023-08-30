@@ -78,7 +78,6 @@ class DownAlarmsHelpers
                     $alarm["downAlarm_start_time"] = $downAlarm->start_time;
                     $alarm["downAlarm_end_date"] = $downAlarm->end_date;
                     $alarm["downAlarm_end_time"] = $downAlarm->end_time;
-
                     $alarm["powerAlarm_start_date"] = $code->start_date;
                     $alarm["powerAlarm_start_time"] = $code->start_time;
                     $alarm["powerAlarm_end_date"] = $code->end_date;
