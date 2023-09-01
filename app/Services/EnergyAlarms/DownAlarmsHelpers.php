@@ -96,27 +96,39 @@ class DownAlarmsHelpers
        
         return $sites;
     }
-    public function zoneSitesDownWithoutPowerAlarms($powerAlarmsCollection)
+    private function extractSitesDownWithoutPower($groupedAlarms,$powerAlarmsCollection)
     {
-        $downAlarmsGroupedCodes = $this->downAlarmsCollection->groupBy("site_code");
-       
         $sites = [];
-        foreach ($downAlarmsGroupedCodes as $key => $codes) {
+        foreach ($groupedAlarms as $key => $codes) {
             $powerAlarm=$powerAlarmsCollection->where("site_code", $key)->first();
             if(!$powerAlarm)
             {
                 $alarm["site_name"] = $codes->first()["site_name"];
                 $alarm["site_code"] = $key;
                 $alarm["repeatation"]=$codes->count();
-                $alarm["avg_duration"]=$codes->avg("duration");
+                $alarm["avg_duration"]=HTAlarmsHelpers::convertMinutesToHours($codes->avg("duration")); ;
                 array_push($sites,$alarm);
 
             }
           
            
         }
-
         return $sites;
+
+    }
+    public function zoneSitesDownWithoutPowerAlarms($powerAlarmsCollection)
+    {
+        $downAlarmsGroupedCodes2G = $this->downAlarmsCollection->where("alarm_name", "OML Fault")->groupBy("site_code");
+        $downAlarmsGroupedCodes3G = $this->downAlarmsCollection->where("alarm_name", "NodeB Unavailable")->groupBy("site_code");
+       
+        $sites2G=$this->extractSitesDownWithoutPower($downAlarmsGroupedCodes2G,$powerAlarmsCollection);
+        $sites3G=$this->extractSitesDownWithoutPower($downAlarmsGroupedCodes3G,$powerAlarmsCollection);
+        $allSites["down2G"]=$sites2G;
+        $allSites["down3G"]=$sites3G;
+       
+       
+
+        return $allSites;
 
     }
     
