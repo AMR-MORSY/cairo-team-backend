@@ -53,6 +53,23 @@ class WeeklyStatestics
 
     }
 
+    public function  zonesNumberSitesReporteHTdAlarms()
+    {
+        $HTAlarmsStatestics=new HTAlarmsHelpers($this->HTAlarms);
+         $zonesGenAlarmsNumberSites=$HTAlarmsStatestics->zonesNumberSitesReportedAlarms($this->HTAlarms->groupBy('operational_zone')->keys());
+         return  $zonesGenAlarmsNumberSites;
+
+    }
+    public function  zonesNumberSitesReporteGendAlarms()
+    {
+        $HTAlarmsStatestics=new GenAlarmsHelpers($this->genAlarms);
+         $zonesGenAlarmsNumberSites=$HTAlarmsStatestics->zonesNumberSitesReportedAlarms($this->genAlarms->groupBy('operational_zone')->keys());
+         return  $zonesGenAlarmsNumberSites;
+
+    }
+
+
+
 
 
     public function zonesSitesReportedPowerAlarms()
@@ -82,6 +99,7 @@ class WeeklyStatestics
         return   $zonesSitesReportedHTAlarms;
     }
 
+   
    
 
 

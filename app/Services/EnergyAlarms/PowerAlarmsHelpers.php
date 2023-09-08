@@ -42,20 +42,18 @@ class PowerAlarmsHelpers
     {
         $oz = [];
         foreach ($zones as $zone) {
-            $siteCodes = $this->powerAlarmsCollection->where("operational_zone", $zone)->groupBy("site_code");
-            $sites=[];
-                    foreach($siteCodes as $key=>$code)
-                    {
-                        $site["site_code"]=$key;
-                        $site["site_name"]=$code->first()->site_name;
-                        $site["repeatation"]=$code->count();
-                        array_push($sites,$site);
-        
-                    }
+            $siteCodesCount = $this->powerAlarmsCollection->where("operational_zone", $zone)->groupBy("site_code")->keys()->count();
+          
                    
 
-            $oz[$zone] =$sites;
+            $oz[$zone] = $siteCodesCount;
         }
+        $total=0;
+        foreach($oz as $key=>$value)
+        {
+            $total=$total+$value;
+        }
+        $oz['Cairo']=$total;
         return $oz;
     }
    

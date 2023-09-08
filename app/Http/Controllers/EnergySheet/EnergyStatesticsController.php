@@ -106,10 +106,12 @@ class EnergyStatesticsController extends Controller
 
              $zonesHTAlarmsCount=$statestics->zonesHTAlarmsCount();
              $zonesSitesReportedHTAlarms=$statestics->zonesSitesReportedHTAlarms();
+             $zonesSitesNumberSitesReportedHTAlarms=$statestics->zonesNumberSitesReporteHTdAlarms();
           
 
             $zonesGenAlarmsCount=$statestics->zonesGenAlarmsCount();
             $zonesSitesReportedGenAlarms=$statestics->zonesSitesReportedGenAlarms();
+            $zonesSitesNumberSitesReportedGenAlarms=$statestics->zonesNumberSitesReporteGendAlarms();
            
             $data["period"]="week";
             $data["period_No"]=$week;
@@ -121,9 +123,12 @@ class EnergyStatesticsController extends Controller
 
              $data["zonesHTAlarmsCount"]=$zonesHTAlarmsCount; 
              $data['zonesSitesReportedHTAlarms']=$zonesSitesReportedHTAlarms;
+             $data['zonesNumberSitesReportedHTAlarms']=$zonesSitesNumberSitesReportedHTAlarms;
 
             $data["zonesGenAlarmsCount"]=$zonesGenAlarmsCount;
             $data['zonesSitesReportedGenAlarms']= $zonesSitesReportedGenAlarms;
+            $data['zonesNumberSitesReportedGenAlarms']=$zonesSitesNumberSitesReportedGenAlarms;
+
           
 
             $notFound['error']=false;

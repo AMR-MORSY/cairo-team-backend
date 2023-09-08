@@ -27,6 +27,25 @@ class DownAlarmsHelpers
 
         return $oz;
     }
+    public function zonesNumberSitesReportedAlarms($zones)
+    {
+        $oz = [];
+        foreach ($zones as $zone) {
+            $siteCodesCount = $this->downAlarmsCollection->where("operational_zone", $zone)->groupBy("site_code")->keys()->count();
+          
+                   
+
+            $oz[$zone] = $siteCodesCount;
+        }
+        $total=0;
+        foreach($oz as $key=>$value)
+        {
+            $total=$total+$value;
+        }
+        $oz['Cairo']=$total;
+        return $oz;
+
+    }
     private function extractSites($groupedAlarms)
     {
         $sites = [];
