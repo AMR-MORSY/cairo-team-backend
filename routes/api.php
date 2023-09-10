@@ -57,6 +57,8 @@ Route::prefix("energysheet")->middleware(['auth:sanctum'])->group(function(){
     Route::get('/zoneSitesDownWithoutPowerAlarms/{zone}/{week}/{year}',[EnergyZoneStatesticsController::class,"zoneSitesDownWithoutPowerAlarms"]);
     Route::post("/sitePowerAlarms",[EnergySiteStatesticsController::class,"sitePowerAlarms"]);
     Route::post("/siteHighTempAlarms",[EnergySiteStatesticsController::class,"siteHighTempAlarms"]);
+    Route::post("/siteBatteriesHealth",[EnergySiteStatesticsController::class,"siteBatteriesHealth"]);
+    Route::post("/siteDownAlarmsGroupedByWeek",[EnergySiteStatesticsController::class,"siteDownAlarmsGroupedByWeek"]);
     Route::post("/siteGenAlarms",[EnergySiteStatesticsController::class,"siteGenAlarms"]);
     Route::post("/downloadSitePowerAlarms",[EnergySiteStatesticsController::class,"downloadSitePowerAlarms"]);
     Route::post("/downloadSiteHighTempAlarms",[EnergySiteStatesticsController::class,"downloadSiteHighTempAlarms"]);

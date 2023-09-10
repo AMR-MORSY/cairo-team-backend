@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Exports\Energy\SiteGenAlarmsExport;
 use App\Exports\Energy\SitePowerAlarmsExport;
 use App\Exports\Energy\SiteHighTempAlarmsExport;
+use App\Models\EnergySheet\DownAlarm;
+use App\Services\EnergyAlarms\DownAlarmsHelpers;
 
 class EnergySiteStatesticsController extends Controller
 {
@@ -116,6 +118,81 @@ class EnergySiteStatesticsController extends Controller
             return response()->json([
 
                 "alarms"=>$alarms,
+
+            ],200);
+        }
+
+    }
+
+    public function siteBatteriesHealth(Request $request)
+    {
+        $ruls = [
+            "site_code" => "required|exists:sites,site_code",
+
+
+        ];
+        $validator = Validator::make($request->all(), $ruls);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    "errors" => $validator->getMessageBag()->toArray(),
+
+                ],
+                422
+            );
+            $this->throwValidationException(
+
+
+                $validator
+
+            );
+        } else {
+            $validated = $validator->validated();
+            $siteDownAlarms=DownAlarm::where("site_code",$validated["site_code"])->get();
+            $sitePowerAlarms=PowerAlarm::where("site_code",$validated["site_code"])->get();
+
+            $statestics=new DownAlarmsHelpers($siteDownAlarms);
+            $statestics=$statestics->siteBatteriesHealth($sitePowerAlarms);
+            return response()->json([
+                "statestics"=>$statestics
+
+            ],200);
+
+        }
+
+    }
+
+    public function siteDownAlarmsGroupedByWeek(Request $request)
+    {
+        $ruls = [
+            "site_code" => "required|exists:sites,site_code",
+
+
+        ];
+        $validator = Validator::make($request->all(), $ruls);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    "errors" => $validator->getMessageBag()->toArray(),
+
+                ],
+                422
+            );
+            $this->throwValidationException(
+
+
+                $validator
+
+            );
+        } else {
+            $validated = $validator->validated();
+            $siteDownAlarms=DownAlarm::where("site_code",$validated["site_code"])->get();
+            $statestics=new DownAlarmsHelpers($siteDownAlarms);
+            $statestics=$statestics->siteDownAlarmsGroupedByWeek();
+            return response()->json([
+                "statestics"=>$statestics
 
             ],200);
         }
