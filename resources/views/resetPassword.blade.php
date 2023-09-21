@@ -8,7 +8,8 @@
 </head>
 <body>
     <h1>You have requested Password Reset</h1>
-    <p>Your Token:<strong>{{$token}}</strong></p>
+    <h3>Please click the link to reset your password </h3>
+    <a href="https://cairo-team.com/user/{{$token}}" style="text-decoration: solid"><strong>{{$token}}</strong></a>
     <p>Thank you.</p>
 </body>
 </html>

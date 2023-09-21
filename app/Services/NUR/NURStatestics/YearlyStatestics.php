@@ -42,7 +42,7 @@ class YearlyStatestics
                 array_push($allTickets,$NUR);
             }
             $allTickets=collect($allTickets);
-            $allTickets_week=$allTickets->groupBy("week");
+            $allTickets_week=$allTickets->sortBy([['week', 'asc']])->groupBy("week");
             $NUR_week_c=[];
             foreach($allTickets_week as $week=>$tickets)
             {
@@ -99,7 +99,7 @@ class YearlyStatestics
     private function getNUR_C()
     {
         $allTickets=$this->gatherTickets();
-        $allTickets_weeks=$allTickets->groupBy("week");
+        $allTickets_weeks=$allTickets->sortBy([['week', 'asc']])->groupBy("week");
         $NUR_C=[];
 
         foreach(  $allTickets_weeks as $week=>$tickets)
@@ -205,7 +205,7 @@ class YearlyStatestics
     public function cairoGenNUR()
     {
         $allTickets=$this->gatherTickets();
-        $allTickets_weeks=$allTickets->groupBy("week");
+        $allTickets_weeks=$allTickets->sortBy([['week', 'asc']])->groupBy("week");
         $gen_NUR_C=[];
 
         foreach(  $allTickets_weeks as $week=>$tickets)

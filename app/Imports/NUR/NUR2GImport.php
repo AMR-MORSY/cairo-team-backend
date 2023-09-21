@@ -47,7 +47,7 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
             "*.Site name" => ['string'],
             "*.Problem source site name" => [ "string"],
             "*.BSC" => ["required", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
-            "*.Cells" => ["required", "regex:/^(200)|[1-9]\d?$/"],
+            "*.Cells" => ["required", "regex:/^([1-9][0-9]{0,2}|1000)$/"],
             '*.System' => ['string'],
             "*.Sub system" => ['string'],
             "*.Type" => ['required', "regex:/^Involuntary|Voluntary$/"],

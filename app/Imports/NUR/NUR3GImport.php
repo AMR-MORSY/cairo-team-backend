@@ -40,7 +40,7 @@ class NUR3GImport implements ToModel, WithHeadingRow,WithValidation
             "*.Site Name (Node B)" => ["required",'string'],
             "*.Problem source site name"=>["required",'string'],
             "*.RNC" => ["required", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
-            "*.No of cells"=>["required","regex:/^(200)|[1-9]\d?$/"],
+            "*.No of cells"=>["required","regex:/^([1-9][0-9]{0,2}|1000)$/"],
             '*.System'=>['required','string'],
             "*.Sub System"=>['required','string'],
             "*.Type"=>['required',"regex:/^Involuntary|Voluntary$/"],

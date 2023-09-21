@@ -49,7 +49,6 @@ class NUR4GExport implements FromCollection,WithHeadings,Responsable
         return [
             '#',
             "impacted Sites",
-            "RNC",
             "cells",
             "Begin",
             "End",
@@ -66,12 +65,12 @@ class NUR4GExport implements FromCollection,WithHeadings,Responsable
             "Duration_HR",
             "Duration_min",
             "week",
-            "year",
-            "network cells",
             "gen owner",
+            "year",
             'problem Site Code',
             'problem Site Name',
             "month",
+            "network cells",
             "monthly NUR",
            
             

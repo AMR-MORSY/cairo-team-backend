@@ -97,10 +97,10 @@ class SuperAdminSitesController extends Controller
              "sharing"=>['nullable',"regex:/^Yes|No$/"],
              "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza$/'],
              "host"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
-             "gest"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
-             "2G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
-             "3G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
-             "4G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
+             "gest"=>['nullable',"regex:/^VF|OG||ET||WE|ET+VF|ET+WE|ET+VF+WE|VF+WE$/"],
+             "2G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
+             "3G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
+             "4G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
              "status"=>["required","regex:/^On Air|Off Air$/"],
          ];
          $validator = Validator::make($request->all(), $ruls);
@@ -166,10 +166,10 @@ class SuperAdminSitesController extends Controller
             "sharing"=>['nullable',"regex:/^Yes|No$/"],
             "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza$/'],
             "host"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
-            "gest"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
-            "2G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
-            "3G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
-            "4G_cells"=> ["nullable", "regex:/^(100)|[1-9]\d?$/"],
+            "gest"=>['nullable',"regex:/^VF|OG||ET||WE|ET+VF|ET+WE|ET+VF+WE|VF+WE$/"],
+            "2G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
+            "3G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
+            "4G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
         ];
         $validator = Validator::make($request->all(), $ruls);
         

@@ -65,15 +65,15 @@ class NUR3GExport implements FromCollection,Responsable,WithHeadings
             "Force Majeure",
             "Force Majeure type",
             "technology",
+            "gen owner",
             "Duration_HR",
             "Duration_min",
             "week",
             "year",
-            "network cells",
-            "gen owner",
             'problem Site Code',
             'problem Site Name',
             "month",
+            "network cells",
             "monthly NUR",
            
             

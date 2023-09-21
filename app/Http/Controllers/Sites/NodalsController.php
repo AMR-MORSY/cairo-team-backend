@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Sites;
 
+use App\Models\Nodal;
 use Illuminate\Http\Request;
+use App\Exports\sites\NodalsExport;
 use App\Imports\Sites\NodalsImport;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class NodalsController extends Controller
 {
@@ -69,6 +71,13 @@ class NodalsController extends Controller
 
        
 
+
+    }
+
+    public function exportNodals(Request $request)
+    {
+      
+         return new NodalsExport();
 
     }
 }

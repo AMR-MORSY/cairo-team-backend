@@ -87,6 +87,7 @@ Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(f
     Route::get('/cascades',[CascadesController::class,"exportAllCascades"])->name("all_cascades");
     Route::post('/cascades',[CascadesController::class,"importCascades"])->name("import_cascades");
     Route::post('/nodals',[NodalsController::class,"importNodals"])->name("import_nodals");
+    Route::get('/nodals/download',[NodalsController::class,"exportNodals"]);
     Route::post('/updateCascades',[CascadesController::class,"updateCascades"])->name("updateCascades");
     Route::post('/update',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
     

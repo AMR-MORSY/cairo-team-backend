@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('severity',['Bronze',"Golden","Silver"])->nullable();
             $table->enum('sharing',['Yes',"No"])->nullable();
             $table->enum('host',['VF',"OG","ET","WE"])->nullable();
-            $table->enum('gest',['VF',"OG","ET","WE"])->nullable();
+            $table->enum('gest',['VF',"OG","ET","WE","ET+VF","ET+VF+WE","ET+WE","VF+WE"])->nullable();
             $table->enum('oz',['Cairo South',"Giza","Cairo North",'Cairo East'])->nullable();
             $table->enum('zone',["Cairo"])->nullable();
             $table->integer("2G_cells")->nullable();

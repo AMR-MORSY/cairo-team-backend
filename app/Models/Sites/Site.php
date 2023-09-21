@@ -2,6 +2,7 @@
 
 namespace App\Models\Sites;
 
+use App\Models\Instruments\Instrument;
 use App\Models\Modifications\Modification;
 use App\Models\Nodal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,5 +21,9 @@ class Site extends Model
     public function modifications()
     {
         return $this->hasMany(Modification::class,"site_code","site_code");
+    }
+    public function instrument()
+    {
+        return $this->hasOne(Instrument::class,"site_code","site_code");
     }
 }

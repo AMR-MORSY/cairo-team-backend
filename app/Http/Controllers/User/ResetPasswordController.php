@@ -5,9 +5,11 @@ namespace App\Http\Controllers\User;
 use App\Models\Users\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Users\PasswordReset;
+use Spatie\Permission\Models\Role;
 use App\Mail\ResetPasswordMailable;
+use App\Models\Users\PasswordReset;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,7 +34,8 @@ class ResetPasswordController extends Controller
 
         if ($user) {
             $token = Str::random(32);
-            Mail::to($user)->send(new ResetPasswordMailable($token));
+            $url = $request->host();
+            Mail::to($user)->send(new ResetPasswordMailable($token, $url));
             $password_reset = new PasswordReset();
             $password_reset->email = $user->email;
             $password_reset->token = $token;
@@ -49,14 +52,14 @@ class ResetPasswordController extends Controller
             "token" => 'required'
 
         ]);
-        $validated = $validator->validated();
+
 
         if ($validator->fails()) {
             return response()->json([
                 $validator->getMessageBag(),
             ], 422);
-        }
-        if ($validated) {
+        } else {
+            $validated = $validator->validated();
             $password_reset = PasswordReset::where('token', $validated['token'])->first();
         }
 
@@ -74,24 +77,51 @@ class ResetPasswordController extends Controller
     public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "password" => ['required', 'string', "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", 'confirmed']
+            "password" => ['required', 'string', "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", 'confirmed'],
+            "user_id" => ['required', "exists:users,id"]
 
         ]);
         if ($validator->fails()) {
             return response()->json([
-              "errors"=>  $validator->getMessageBag()->toArray(),
+                "errors" =>  $validator->getMessageBag()->toArray(),
             ], 422);
-        }
-        else{
-            $validated=$validator->validated();
+        } else {
+            $validated = $validator->validated();
             $user = User::find($validated["user_id"]);
-
-            $password_reset = PasswordReset::where("email", $user->email);
-            $password_reset->delete();
             $user->password = bcrypt($request->input('password'));
             $user->save();
-        }
+            if (Auth::attempt(['email' => $user->email, 'password' => $request->input('password')])) {
+                $password_reset = PasswordReset::where("email", $user->email);
+                $password_reset->delete();
+                $token=$request->user()->createToken($request->input("email"));
+                $roles=User::find(Auth::user()->id)->roles;
+                $permissions=[];
+                foreach($roles as $role)
+                {
+                    $permission=Role::find($role->id)->permissions;
+                    array_push($permissions,$permission);
 
-       
+                }
+               
+
+                 $user=User::where("id",Auth::user()->id)->first();
+                $data=[];
+                $user_data=[];
+                $user_data["user"]=$user;
+                $user_data["roles"]=$roles;
+                $user_data["permissions"]=$permissions;
+                $user_data["token"]=$token;
+                $data["user_data"]=$user_data;
+               
+                return response()->json(
+                    $data
+                    
+        
+
+
+
+                ,200);
+            }
+        }
     }
 }
