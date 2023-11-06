@@ -143,13 +143,13 @@ class DownAlarmsHelpers
                             $duration["duration"] = $this->calculateDuration($downAlarm->start_time, $value->start_time);
                             array_push($durationsBeforeDown, $duration);
                             $powerAlarmBeforDownWeekCount["week$key"] = collect($durationsBeforeDown)->count();
-                            $avgBackuptimeWeek["week$key"] =  intval(collect($durationsBeforeDown)->avg("duration"));
+                            $avgBackuptimeWeek["week$key"] =  intval(collect($durationsBeforeDown)->max("duration"));
         
                         } else {
                             $duration['duration'] = $value->duration;
                             array_push($powerAlarmsDurs, $duration);
                             $powerAlarmsWithoutDownCount["week$key"]=collect($powerAlarmsDurs)->count();
-                            $avgAlarmsDurationWithoutDown["week$key"]= intval(collect($powerAlarmsDurs)->avg("duration"));
+                            $avgAlarmsDurationWithoutDown["week$key"]= intval(collect($powerAlarmsDurs)->max("duration"));
                         }
                     }
                   
@@ -173,9 +173,9 @@ class DownAlarmsHelpers
             return [
                 "powerAlarms" => "exist",
                 "powerAlarmsCountBeforeDown" =>  $countAlarmsYearsCollectionBeforeDown,
-                "avgBackuptime" => $avgBackuptimeYearsCollection,
+                "maxBackuptime" => $avgBackuptimeYearsCollection,
                 "powerAlarmsWithoutDown"=>  $powerAlarmsWithoutDownCountYearsCollection,
-                "avgAlarmsDurationWithoutDown"=>  $avgAlarmsDurationWithoutDownYearsCollection
+                "maxAlarmsDurationWithoutDown"=>  $avgAlarmsDurationWithoutDownYearsCollection
 
 
             ];

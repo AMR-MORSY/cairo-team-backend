@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('instruments', function (Blueprint $table) {
             $table->id();
+            $table->string('site_code');
             $table->foreign("site_code")->references("site_code")->on('sites')->onUpdate("cascade")->onDelete("cascade");
             $table->date("on_air_date")->nullable();
             $table->string("topology")->nullable();
@@ -41,8 +42,6 @@ return new class extends Migration
             $table->string("ac1_hp",50)->nullable();
             $table->string("ac2_type",50)->nullable();
             $table->string("ac2_hp",50)->nullable();
-            $table->string("ac3_type",50)->nullable();
-            $table->string("ac3_hp",50)->nullable();
             $table->string("network_type",50)->nullable();
             $table->string("rec_brand",50)->nullable();
             $table->string("module_capacity",50)->nullable();

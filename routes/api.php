@@ -15,14 +15,19 @@ use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\Sites\CascadesController;
 use App\Http\Controllers\NUR\DownloadNURController;
 
+use App\Http\Controllers\Transmission\XPICController;
 use App\Http\Controllers\EnergySheet\EnergyController;
 use App\Http\Controllers\User\ResetPasswordController;
+use Spatie\Permission\Middlewares\PermissionMiddleware;
 use App\Http\Controllers\Sites\SuperAdminSitesController;
 use App\Http\Controllers\Sites\NormalUsersSitesController;
+use App\Http\Controllers\Instruments\InstrumentsController;
 use App\Http\Controllers\Modifications\ModificationsController;
 use App\Http\Controllers\EnergySheet\EnergyStatesticsController;
 use App\Http\Controllers\EnergySheet\EnergySiteStatesticsController;
 use App\Http\Controllers\EnergySheet\EnergyZoneStatesticsController;
+use App\Http\Controllers\Transmission\WANController;
+use App\Models\Transmission\IP_traffic;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +42,7 @@ use App\Http\Controllers\EnergySheet\EnergyZoneStatesticsController;
 
 Route::prefix("user")->middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout',[LogoutController::class,"logout"]);
-    Route::get("refreshsession",[LoginController::class,"refresh_session"]);
+   
 
 });
 
@@ -134,4 +139,45 @@ Route::post("/login",[LoginController::class,"login"]);
 Route::post("/sendToken",[ResetPasswordController::class,"sendToken"]);
 Route::post("/validateToken",[ResetPasswordController::class,"validateToken"]);
 Route::post("/resetPassword",[ResetPasswordController::class,"resetPassword"]);
+// Route::post("refreshtoken",[LoginController::class,"refresh_token"]);
+});
+
+Route::prefix("instruments")->middleware(['auth:sanctum'])->group(function(){
+    Route::post('/siteBatteriesData',[InstrumentsController::class,"siteBatteriesData"]);
+   
+    Route::post('/siteRectifierData',[InstrumentsController::class,"siteRectifierData"]);
+    Route::post('/siteDeepData',[InstrumentsController::class,"siteDeepData"]);
+    Route::post('/siteMWData',[InstrumentsController::class,"siteMWData"]);
+    Route::post('/siteBTSData',[InstrumentsController::class,"siteBTSData"]);
+    Route::post('/sitePowerData',[InstrumentsController::class,"sitePowerData"]);
+
+});
+
+Route::prefix("instruments")->middleware((["auth:sanctum","role:admin|super-admin"]))->group(function(){
+    Route::post('/updateMWData',[InstrumentsController::class,"updateMWData"]);
+    Route::post('/updateBatteriesData',[InstrumentsController::class,"updateSiteBatteriesData"]);
+    Route::post('/updateRectifierData',[InstrumentsController::class,"updateRectifierData"]);
+    Route::post('/updateSiteDeepData',[InstrumentsController::class,"updateSiteDeepData"]);
+    Route::post('/updateSiteBTSData',[InstrumentsController::class,"updateSiteBTSData"]);
+    Route::post('/updateSitePowerData',[InstrumentsController::class,"updateSitePowerData"]);
+
+});
+Route::prefix('sites')->group(function(){
+    Route::get('/index',[NormalUsersSitesController::class,"index"]);
+   
+});
+
+Route::prefix("Transmission")->middleware(["auth:sanctum","permission:read_TX_data"])->group(function(){
+    Route::post("getSiteXPICS",[XPICController::class,"getSiteXPICS"]);
+    Route::post("getSiteWANS",[WANController::class,"getSiteWANS"]);
+    Route::post("getSiteIP_trafics",[IP_trafficController::class,"getSiteIP_trafics"]);
+  
+
+});
+Route::prefix("Transmission")->middleware(["auth:sanctum","permission:store_TX_data"])->group(function(){
+    Route::post("updateSiteIP_trafics",[IP_trafficController::class,"updateSiteIP_trafics"]);
+    Route::post("updateSiteXPICs",[XPICController::class,"updateSiteXPICs"]);
+    Route::post("updateSiteWAN",[WANController::class,"updateSiteWAN"]);
+    Route::post("storeSiteWAN",[WANController::class,"storeSiteWAN"]);
+
 });

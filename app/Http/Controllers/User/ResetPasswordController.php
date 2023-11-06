@@ -41,9 +41,12 @@ class ResetPasswordController extends Controller
             $password_reset->token = $token;
             $password_reset->save();
         } else {
+
+            $emailError["email"]="Email does not exist";
+
             return response()->json([
-                "error" => "Email does not exist",
-            ], 401);
+                "errors" => $emailError,
+            ], 422);
         }
     }
     public function validateToken(Request $request)
@@ -93,7 +96,7 @@ class ResetPasswordController extends Controller
             if (Auth::attempt(['email' => $user->email, 'password' => $request->input('password')])) {
                 $password_reset = PasswordReset::where("email", $user->email);
                 $password_reset->delete();
-                $token=$request->user()->createToken($request->input("email"));
+                $token=$request->user()->createToken($user->email);
                 $roles=User::find(Auth::user()->id)->roles;
                 $permissions=[];
                 foreach($roles as $role)

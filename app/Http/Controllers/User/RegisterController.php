@@ -15,7 +15,7 @@ class RegisterController extends Controller
         $validator=Validator::make($request->all(),[
             "email"=>"required|unique:users",
             "password"=>  ['required', "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", 'confirmed'],
-            "name"=>"required|min:8"
+            "name"=>"required|max:50"
         ]);
 
         if($validator->fails())

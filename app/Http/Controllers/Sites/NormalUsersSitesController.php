@@ -181,4 +181,46 @@ class NormalUsersSitesController extends Controller
             }
         }
     }
+
+    public function index()
+    {
+        $sites=Site::all();
+        $total_sites_count=$sites->count();
+        $categories=$sites->groupBy("category");
+        $statestics=[];
+        
+
+        foreach($categories as $category=>$sites)
+        {
+           
+            if($category=="NDL")
+            {
+               $statestics["NDL"]=$sites->count();
+              
+            }
+            if($category=="VIP")
+            {
+               $statestics["VIP"]=$sites->count();
+                
+            }
+            if($category=="VIP + NDL")
+            {
+               $statestics["VIP_NDL"]=$sites->count();
+               
+            }
+            if($category=="LDN")
+            {
+               $statestics["LDN"]=$sites->count();
+            }
+               
+           
+        }
+        
+
+        return response()->json([
+            "total_sites"=>$total_sites_count,
+            "statestics"=>$statestics
+        ],200);
+
+    }
 }

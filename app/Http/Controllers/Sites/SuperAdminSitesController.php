@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\sites\AllSitesExport;
 use Illuminate\Support\Facades\Validator;
 
+
 class SuperAdminSitesController extends Controller
 {
     public function index()
@@ -79,8 +80,8 @@ class SuperAdminSitesController extends Controller
     }
     public function export_all(Request $request)
     {
-        
-        return new AllSitesExport();
+       
+     return new AllSitesExport();
     }
 
     public function siteUpdate(Request $request)
@@ -156,9 +157,9 @@ class SuperAdminSitesController extends Controller
 
         $ruls=[
            "site_code"=>["required","unique:sites,site_code","regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))$/"],
-           "site_name"=>["required", "regex:/^([0-9a-zA-Z_-]|\s){2,60}$/"],
-           " BSC"=>["nullable", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
-            "RNC"=>["nullable", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
+           "site_name"=>["required", "regex:/^([0-9a-zA-Z_-]){2,60}$/"],
+           " BSC"=>["nullable", "regex:/^([0-9a-zA-Z_-]){3,50}$/"],
+            "RNC"=>["nullable", "regex:/^([0-9a-zA-Z_-]){3,50}$/"],
             "office"=>["nullable", "string"],
             "severity"=>['nullable',"regex:/^Golden|Bronze|Silver$/"],
             "category"=>['nullable',"regex:/^Normal|BSC|NDL|LDN|VIP+NDL|VIP$/"],

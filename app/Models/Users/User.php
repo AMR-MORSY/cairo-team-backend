@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasPermissions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -48,5 +49,15 @@ class User extends Authenticatable
     public function session()
     {
         return $this->hasOne(UserSession::class,"user_id");
+    }
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: function($value){
+                [$first,$last]=explode(" ",$value);
+                return $first;
+            }
+        );
     }
 }

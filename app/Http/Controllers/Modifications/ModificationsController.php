@@ -156,12 +156,7 @@ class ModificationsController extends Controller
             $modification->subcontractor = $validated["subcontractor"];
             $modification->status = $validated["status"];
             $modification->request_date = $this->dateFormat($validated["request_date"]);
-            // if (isset($validated["finish_date"]) && !empty($validated["finish_date"])) {
                 $modification->finish_date = $this->dateFormat($validated["finish_date"]);
-            // } else {
-            //     $modification->finish_date = null;
-            // }
-
             $modification->cost = $validated["cost"];
             $modification->project = $validated["project"];
             $modification->action = $validated["action"];
