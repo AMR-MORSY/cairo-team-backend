@@ -13,6 +13,7 @@ class InstrumentsController extends Controller
 {
     public function siteBatteriesData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -52,6 +53,7 @@ class InstrumentsController extends Controller
 
     public function updateSiteBatteriesData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "battery_brand" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
@@ -88,13 +90,14 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
     }
 
     public function siteRectifierData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -141,6 +144,7 @@ class InstrumentsController extends Controller
 
     public function updateRectifierData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "rec_brand" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
@@ -175,12 +179,13 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
     }
     public function siteDeepData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -230,6 +235,7 @@ class InstrumentsController extends Controller
     }
     public function updateSiteDeepData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "on_air_date" => ['nullable', 'date'],
@@ -285,13 +291,14 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
     }
 
     public function siteMWData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -330,6 +337,7 @@ class InstrumentsController extends Controller
 
     public function updateMWData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "no_mw" => ['required', "integer","min:0" ,"max:50"],
@@ -359,7 +367,7 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
     }
@@ -367,6 +375,7 @@ class InstrumentsController extends Controller
 
     public function siteBTSData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -411,6 +420,7 @@ class InstrumentsController extends Controller
 
     public function updateSiteBTSData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "no_bts" => ['required', 'integer',"min:0", 'max:50'],
@@ -444,13 +454,14 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
     }
 
     public function sitePowerData(Request $request)
     {
+        $this->authorize("viewAny",Instrument::class);
         $validator = Validator::make($request->all(), [
             "site_code" => ['required', "exists:sites,site_code"]
 
@@ -490,6 +501,7 @@ class InstrumentsController extends Controller
     }
     public function updateSitePowerData(Request $request)
     {
+        $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
             "power_source" =>['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
@@ -527,7 +539,7 @@ class InstrumentsController extends Controller
                 return response()->json([
                     "message" => "site instruments not found",
 
-                ], 404);
+                ], 204);
             }
         }
 

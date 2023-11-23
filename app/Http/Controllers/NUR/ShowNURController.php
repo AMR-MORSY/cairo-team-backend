@@ -17,14 +17,12 @@ use stdClass;
 
 class ShowNURController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(["role:admin|super-admin"]);
-    }
-
+    
+   
 
     public function show_nur($week, $year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,
@@ -50,7 +48,7 @@ class ShowNURController extends Controller
                 return response()->json([
                     "errors" => $weeklyNUR['errors'],
 
-                ], 404);
+                ], 204);
             } else {
                 return response()->json([
 
@@ -64,6 +62,7 @@ class ShowNURController extends Controller
 
     public function cairoYearlyNUR_C($year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->get();
@@ -80,7 +79,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -95,6 +94,7 @@ class ShowNURController extends Controller
         }
     }
     public function cairoModificationYearlyNUR($year){
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->where("system","production")->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->where("system","production")->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->where("system","production")->get();
@@ -111,7 +111,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -129,6 +129,7 @@ class ShowNURController extends Controller
     }
     public function cairoPowerYearlyNUR($year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->where("sub_system","main power")->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->where("sub_system","main power")->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->where("sub_system","main power")->get();
@@ -145,7 +146,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -163,6 +164,7 @@ class ShowNURController extends Controller
 
     public function cairoNodeBYearlyNUR($year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->where("system","bss")->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->where("system","ran")->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->where("system","ran")->get();
@@ -179,7 +181,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -196,6 +198,7 @@ class ShowNURController extends Controller
     }
     public function cairoMWYearlyNUR($year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->where("system","transmission")->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->where("system","transmission")->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->where("system","transmission")->get();
@@ -212,7 +215,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -229,6 +232,7 @@ class ShowNURController extends Controller
     }
     public function cairoGenYearlyNUR($year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $total_year_tickets_2G = NUR2G::where('year', $year)->where("sub_system","GENERATOR")->get();
         $total_year_tickets_3G = NUR3G::where('year', $year)->where("sub_system","GENERATOR")->get();
         $total_year_tickets_4G = NUR4G::where('year', $year)->where("sub_system","GENERATOR")->get();
@@ -245,7 +249,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],404);
+            ],204);
            
           
         } else {
@@ -304,6 +308,7 @@ class ShowNURController extends Controller
 
     public function siteNUR(Request $request)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $validator = validator::make($request->all(), ["site_code" => ["required", "regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))$/"]]);
         if ($validator->fails()) {
             return response()->json([
@@ -324,6 +329,7 @@ class ShowNURController extends Controller
     }
     public function vipSitesWeeklyNUR($zone, $week, $year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
             "zone" => $zone,
             "week" => $week,
@@ -351,6 +357,7 @@ class ShowNURController extends Controller
     }
     public function nodalSitesWeeklyNUR($zone, $week, $year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
             "zone" => $zone,
             "week" => $week,
@@ -415,6 +422,7 @@ class ShowNURController extends Controller
 
     public function cairoModificationWeeklyNUR($week,$year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,
@@ -450,6 +458,7 @@ class ShowNURController extends Controller
 
     public function cairoPowerWeeklyNUR($week,$year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,
@@ -486,6 +495,7 @@ class ShowNURController extends Controller
 
     public function cairoMWweeklyNUR($week, $year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,
@@ -523,7 +533,7 @@ class ShowNURController extends Controller
 
 
     public function cairoGenweeklyNUR($week, $year)
-    {
+    { $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,
@@ -785,6 +795,7 @@ class ShowNURController extends Controller
 
     public function cairoNodeBWeeklyNUR($week,$year)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $data = [
 
             "week" => $week,

@@ -6,43 +6,46 @@ use App\Models\Sites\Site;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Transmission\IP_traffic;
+
+
 use Illuminate\Support\Facades\Validator;
 
-use function PHPUnit\Framework\countOf;
 
 class IP_traffic_Controller extends Controller
 {
-    public function getSiteIP_trafics(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "site_code" => "required|exists:sites,site_code",
+    
+    // public function getSiteIP_trafics(Request $request)
+    // {
+        
+    //     $validator = Validator::make($request->all(), [
+    //         "site_code" => "required|exists:sites,site_code",
 
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "errors" => $validator->getMessageBag()
-            ], 422);
-        } else {
-            $validated = $validator->validated();
-            $site = Site::where("site_code", $validated["site_code"])->first();
-            $ip_traffics = $site->ip_traffics;
-            if (count($ip_traffics) > 0) {
-                return response()->json([
-                    "message" => "data found",
-                    "ip_traffics" => $ip_traffics
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             "errors" => $validator->getMessageBag()
+    //         ], 422);
+    //     } else {
+    //         $validated = $validator->validated();
+    //         $site = Site::where("site_code", $validated["site_code"])->first();
+    //         $ip_traffics = $site->ip_traffics;
+    //         if (count($ip_traffics) > 0) {
+    //             return response()->json([
+    //                 "message" => "data found",
+    //                 "ip_traffics" => $ip_traffics
 
-                ], 200);
-            }
-            else{
-                return response()->json([
-                    "message" => "data not found",
+    //             ], 200);
+    //         }
+    //         else{
+    //             return response()->json([
+    //                 "message" => "data not found",
                    
 
-                ], 200);
+    //             ], 200);
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
     public function updateSiteIP_trafic(Request $request)
     {
         $validator = Validator::make($request->all(), [

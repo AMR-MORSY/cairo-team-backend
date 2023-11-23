@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use Carbon\Carbon;
 use App\Models\Users\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class ResetPasswordController extends Controller
             $password_reset->save();
         } else {
 
-            $emailError["email"]="Email does not exist";
+            $emailError["email"] = "Email does not exist";
 
             return response()->json([
                 "errors" => $emailError,
@@ -70,9 +71,14 @@ class ResetPasswordController extends Controller
         if (!$password_reset) {
             return response()->json([
                 "error" => "invalid Token"
-            ], 401);
+            ], 200);
         } else {
+
             $user = User::where("email", $password_reset->email)->first();
+            $user->email_verified_at = Carbon::now();
+            $user->remember_token=null;
+           
+            $user->save();
             return response()->json($user, 200);
         }
     }
@@ -93,38 +99,19 @@ class ResetPasswordController extends Controller
             $user = User::find($validated["user_id"]);
             $user->password = bcrypt($request->input('password'));
             $user->save();
-            if (Auth::attempt(['email' => $user->email, 'password' => $request->input('password')])) {
-                $password_reset = PasswordReset::where("email", $user->email);
-                $password_reset->delete();
-                $token=$request->user()->createToken($user->email);
-                $roles=User::find(Auth::user()->id)->roles;
-                $permissions=[];
-                foreach($roles as $role)
-                {
-                    $permission=Role::find($role->id)->permissions;
-                    array_push($permissions,$permission);
 
-                }
-               
+            Auth::attempt(['email' => $user->email, 'password' => $request->input('password')]);
 
-                 $user=User::where("id",Auth::user()->id)->first();
-                $data=[];
-                $user_data=[];
-                $user_data["user"]=$user;
-                $user_data["roles"]=$roles;
-                $user_data["permissions"]=$permissions;
-                $user_data["token"]=$token;
-                $data["user_data"]=$user_data;
-               
-                return response()->json(
-                    $data
-                    
-        
+            $password_reset = PasswordReset::where("email", $user->email);
+            $password_reset->delete();
+            $token = $request->user()->createToken($user->email);
+            $user_data["user"] = $user;
+            $user_data["token"] = $token;
+            return response()->json(
+                ["message" => "User loged in successfully", "user_data" => $user_data],
 
-
-
-                ,200);
-            }
+                200
+            );
         }
     }
 }

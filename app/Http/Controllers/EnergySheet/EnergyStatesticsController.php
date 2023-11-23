@@ -16,6 +16,7 @@ class EnergyStatesticsController extends Controller
 {
     public function statestics($week,$year)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $data=[
            
             "week"=>$week,

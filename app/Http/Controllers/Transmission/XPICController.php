@@ -14,37 +14,37 @@ use function PHPUnit\Framework\countOf;
 
 class XPICController extends Controller
 {
-    public function getSiteXPICS(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "site_code" => "required|exists:sites,site_code",
+    // public function getSiteXPICS(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         "site_code" => "required|exists:sites,site_code",
 
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "errors" => $validator->getMessageBag()
-            ], 422);
-        } else {
-            $validated = $validator->validated();
-            $site = Site::where("site_code", $validated["site_code"])->first();
-            $XPICS = $site->xpics;
-            if (count($XPICS) > 0) {
-                return response()->json([
-                    "message"=>"data found",
-                    "XPICS"=>$XPICS
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             "errors" => $validator->getMessageBag()
+    //         ], 422);
+    //     } else {
+    //         $validated = $validator->validated();
+    //         $site = Site::where("site_code", $validated["site_code"])->first();
+    //         $XPICS = $site->xpics;
+    //         if (count($XPICS) > 0) {
+    //             return response()->json([
+    //                 "message"=>"data found",
+    //                 "XPICS"=>$XPICS
                     
-                ], 200);
-            }
-            else{
-                return response()->json([
-                    "message"=>"data not found",
+    //             ], 200);
+    //         }
+    //         else{
+    //             return response()->json([
+    //                 "message"=>"data not found",
                    
                     
-                ], 200);
+    //             ], 200);
 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
     public function updateSiteXPICs(Request $request)
     {
         $validator = Validator::make($request->all(), [

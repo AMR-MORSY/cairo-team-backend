@@ -12,35 +12,35 @@ use function PHPUnit\Framework\countOf;
 
 class WANController extends Controller
 {
-    public function getSiteWANS(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "site_code" => "required|exists:sites,site_code",
+    // public function getSiteWANS(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         "site_code" => "required|exists:sites,site_code",
 
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "errors" => $validator->getMessageBag()
-            ], 422);
-        } else {
-            $validated = $validator->validated();
-            $site = Site::where("site_code", $validated["site_code"])->first();
-            $WANS = $site->wans;
-            if (count($WANS) > 0) {
-                return response()->json([
-                    "message" => "data found",
-                    "WANS" => $WANS
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             "errors" => $validator->getMessageBag()
+    //         ], 422);
+    //     } else {
+    //         $validated = $validator->validated();
+    //         $site = Site::where("site_code", $validated["site_code"])->first();
+    //         $WANS = $site->wans;
+    //         if (count($WANS) > 0) {
+    //             return response()->json([
+    //                 "message" => "data found",
+    //                 "WANS" => $WANS
 
-                ], 200);
-            } else {
-                return response()->json([
-                    "message" => "data not found",
+    //             ], 200);
+    //         } else {
+    //             return response()->json([
+    //                 "message" => "data not found",
 
 
-                ], 200);
-            }
-        }
-    }
+    //             ], 200);
+    //         }
+    //     }
+    // }
     public function updateSiteWAN(Request $request)
     {
         $validator = Validator::make($request->all(), [

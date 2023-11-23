@@ -1,7 +1,6 @@
 <?php
 
-use Maatwebsite\Excel\Row;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NUR\NUR2GController;
 use App\Http\Controllers\NUR\NUR3GController;
@@ -14,7 +13,6 @@ use App\Http\Controllers\Sites\NodalsController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\Sites\CascadesController;
 use App\Http\Controllers\NUR\DownloadNURController;
-
 use App\Http\Controllers\Transmission\XPICController;
 use App\Http\Controllers\EnergySheet\EnergyController;
 use App\Http\Controllers\User\ResetPasswordController;
@@ -26,8 +24,10 @@ use App\Http\Controllers\Modifications\ModificationsController;
 use App\Http\Controllers\EnergySheet\EnergyStatesticsController;
 use App\Http\Controllers\EnergySheet\EnergySiteStatesticsController;
 use App\Http\Controllers\EnergySheet\EnergyZoneStatesticsController;
+use App\Http\Controllers\Transmission\All_TX_ActionsController;
 use App\Http\Controllers\Transmission\WANController;
-use App\Models\Transmission\IP_traffic;
+use App\Http\Controllers\Transmission\IP_traffic_Controller;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +72,7 @@ Route::prefix("energysheet")->middleware(['auth:sanctum'])->group(function(){
 
 });
 
-Route::prefix('modifications')->middleware(['auth:sanctum',"role:admin|super-admin"])->group(function(){
+Route::prefix('modifications')->middleware(['auth:sanctum'])->group(function(){
     Route::get("/analysis",[ModificationsController::class,"analysis"])->name("analysis");
     Route::get("/index/{columnName}/{columnValue}",[ModificationsController::class,"index"])->name("index");
     Route::post("/update",[ModificationsController::class,"modificationUpdate"])->name("modification_update");
@@ -88,11 +88,11 @@ Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(f
     // Route::get('/newsitesinsert',[SitesController::class,"index"])->name("sites");
     Route::post('/create',[SuperAdminSitesController::class,"siteCreate"])->name("create_site");
     Route::post('/store',[SuperAdminSitesController::class,"store"])->name("store_sites");
-    Route::get('/downloadAll',[SuperAdminSitesController::class,"export_all"])->name("export_all");
+    Route::post('/downloadAll',[SuperAdminSitesController::class,"export_all"])->name("export_all");
     Route::get('/cascades',[CascadesController::class,"exportAllCascades"])->name("all_cascades");
     Route::post('/cascades',[CascadesController::class,"importCascades"])->name("import_cascades");
     Route::post('/nodals',[NodalsController::class,"importNodals"])->name("import_nodals");
-    Route::get('/nodals/download',[NodalsController::class,"exportNodals"]);
+    Route::post('/nodals/download',[NodalsController::class,"exportNodals"]);
     Route::post('/updateCascades',[CascadesController::class,"updateCascades"])->name("updateCascades");
     Route::post('/update',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
     
@@ -135,6 +135,8 @@ Route::prefix('Nur')->middleware(['auth:sanctum',"role:admin|super-admin"])->gro
 
 Route::prefix("user")->group(function(){
 Route::post("/register",[RegisterController::class,"register"]);
+Route::get("/signUp/{code}",[RegisterController::class,"validateSignUpCode"]);
+Route::post("/activateUserAccount",[RegisterController::class,"activateUserAccount"]);
 Route::post("/login",[LoginController::class,"login"]);
 Route::post("/sendToken",[ResetPasswordController::class,"sendToken"]);
 Route::post("/validateToken",[ResetPasswordController::class,"validateToken"]);
@@ -167,17 +169,19 @@ Route::prefix('sites')->group(function(){
    
 });
 
-Route::prefix("Transmission")->middleware(["auth:sanctum","permission:read_TX_data"])->group(function(){
-    Route::post("getSiteXPICS",[XPICController::class,"getSiteXPICS"]);
-    Route::post("getSiteWANS",[WANController::class,"getSiteWANS"]);
-    Route::post("getSiteIP_trafics",[IP_trafficController::class,"getSiteIP_trafics"]);
+Route::prefix("Transmission")->middleware(["auth:sanctum"])->group(function(){
+  
+    Route::get("getSiteTXIssues/{site_code}",[All_TX_ActionsController::class,"getSiteTXIssues"]);
+    Route::get("searchTxIssues/{fromDate}/{toDate}/{issue}",[All_TX_ActionsController::class,"searchTxIssues"]);
   
 
 });
 Route::prefix("Transmission")->middleware(["auth:sanctum","permission:store_TX_data"])->group(function(){
-    Route::post("updateSiteIP_trafics",[IP_trafficController::class,"updateSiteIP_trafics"]);
+    Route::post("updateSiteIP_trafics",[IP_traffic_Controller::class,"updateSiteIP_trafics"]);
     Route::post("updateSiteXPICs",[XPICController::class,"updateSiteXPICs"]);
     Route::post("updateSiteWAN",[WANController::class,"updateSiteWAN"]);
+    Route::post("storeSiteIP_trafic",[IP_traffic_Controller::class,"storeSiteIP_trafic"]);
     Route::post("storeSiteWAN",[WANController::class,"storeSiteWAN"]);
+    Route::post("storeSiteXPICs",[XPICController::class,"storeSiteXPICs"]);
 
 });

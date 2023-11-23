@@ -7,17 +7,16 @@ use App\Exports\NUR\NUR2GExport;
 use App\Exports\NUR\NUR3GExport;
 use App\Exports\NUR\NUR4GExport;
 use App\Http\Controllers\Controller;
+use App\Models\NUR\NUR2G;
 use Illuminate\Support\Facades\Validator;
 
 class DownloadNURController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(["role:admin|super-admin"]);
-    }
+   
      
     public function NUR2G(Request $request)
     {
+        $this->authorize("viewAny",NUR2G::class);
         $validator = Validator::make($request->all(), ["site_code" => ['required']]);
         if ($validator->fails()) {
             return response()->json(array(
@@ -34,6 +33,7 @@ class DownloadNURController extends Controller
     }
     public function NUR3G(Request $request)
     {
+        $this->authorize("viewAny",NUR3G::class);
         $validator = Validator::make($request->all(), ["site_code" => 'required']);
         if ($validator->fails()) {
             return response()->json(array(
@@ -51,6 +51,7 @@ class DownloadNURController extends Controller
     }
     public function NUR4G(Request $request)
     {
+        $this->authorize("viewAny",NUR4G::class);
         $validator = Validator::make($request->all(), ["site_code" => ['required']]);
         if ($validator->fails()) {
             return response()->json(array(

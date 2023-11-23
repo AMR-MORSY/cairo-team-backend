@@ -3,16 +3,18 @@
 namespace App\Models\Users;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Panel;
 use App\Models\Users\UserSession;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
 use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable,HasRoles,HasPermissions;
 
@@ -25,6 +27,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        "remember_token",
+        "email_verified_at"
+
     ];
 
     /**
@@ -55,9 +60,14 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function($value){
-                [$first,$last]=explode(" ",$value);
-                return $first;
+                $user=explode(" ",$value);
+                return $user[0];
             }
         );
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return str_ends_with($this->email, 'morsy.mamr@gmail.com') && $this->hasVerifiedEmail();
     }
 }

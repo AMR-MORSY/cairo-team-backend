@@ -95,7 +95,7 @@ class EnergyZoneStatesticsController extends Controller
     }
     public function zonesSitesReportedDownAlarms($zone, $week, $year)
     {
-       
+        $this->authorize("viewAny",DownAlarm::class);
         $validator =$this->zoneWeekYearValidation($zone,$week,$year);
         if ($validator->fails()) {
             return response()->json([
@@ -123,6 +123,7 @@ class EnergyZoneStatesticsController extends Controller
     }
     public function zoneSitesDownWithoutPowerAlarms($zone, $week, $year)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $validator =$this->zoneWeekYearValidation($zone,$week,$year);
         if ($validator->fails()) {
             return response()->json([
@@ -147,6 +148,7 @@ class EnergyZoneStatesticsController extends Controller
     }
     public function zoneDownSitesAfterPowerAlarm($zone, $week, $year)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $validator =$this->zoneWeekYearValidation($zone,$week,$year);
         if ($validator->fails()) {
             return response()->json([

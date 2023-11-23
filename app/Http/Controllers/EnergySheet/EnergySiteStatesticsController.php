@@ -18,6 +18,7 @@ class EnergySiteStatesticsController extends Controller
 {
     public function sitePowerAlarms(Request $request)
     {
+        $this->authorize("viewAny",PowerAlarm::class);
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
 
@@ -54,6 +55,7 @@ class EnergySiteStatesticsController extends Controller
 
     public function siteHighTempAlarms(Request $request)
     {
+        $this->authorize("viewAny",HighTempAlarm::class);
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
 
@@ -90,6 +92,7 @@ class EnergySiteStatesticsController extends Controller
 
     public function siteGenAlarms(Request $request)
     {
+        $this->authorize("viewAny",GenAlarm::class);
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
 
@@ -126,6 +129,7 @@ class EnergySiteStatesticsController extends Controller
 
     public function siteBatteriesHealth(Request $request)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
 
@@ -165,6 +169,8 @@ class EnergySiteStatesticsController extends Controller
 
     public function siteDownAlarmsGroupedByWeek(Request $request)
     {
+        $this->authorize("viewAny",DownAlarm::class);
+        
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
 
@@ -200,7 +206,7 @@ class EnergySiteStatesticsController extends Controller
     }
 
     public function downloadSitePowerAlarms(Request $request)
-    {
+    { $this->authorize("viewAny",DownAlarm::class);
         $ruls = [
             "siteCode" => "required|exists:sites,site_code",
 
@@ -233,6 +239,7 @@ class EnergySiteStatesticsController extends Controller
 
     public function downloadSiteHighTempAlarms(Request $request)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $ruls = [
             "siteCode" => "required|exists:sites,site_code",
 
@@ -264,6 +271,7 @@ class EnergySiteStatesticsController extends Controller
     }
     public function downloadSiteGenAlarms(Request $request)
     {
+        $this->authorize("viewAny",DownAlarm::class);
         $ruls = [
             "siteCode" => "required|exists:sites,site_code",
 

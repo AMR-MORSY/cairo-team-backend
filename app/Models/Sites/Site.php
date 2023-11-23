@@ -16,48 +16,45 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Site extends Model
 {
-    use LogsActivity;
-    use HasFactory;
-    protected $table="sites";
-    protected $guarded=[];
-    protected $hidden=["created_at","updated_at"];
    
+    use HasFactory;
+    protected $table = "sites";
+    protected $guarded = [];
+    protected $hidden = ["created_at", "updated_at"];
+
+   
+
     public function nodal()
     {
-        return $this->hasOne(Nodal::class,"site_code","site_code");
+        return $this->hasOne(Nodal::class, "site_code", "site_code");
     }
     public function modifications()
     {
-        return $this->hasMany(Modification::class,"site_code","site_code");
+        return $this->hasMany(Modification::class, "site_code", "site_code");
     }
     public function wans()
     {
-        return $this->hasMany(WAN::class,"site_code","site_code");
+        return $this->hasMany(WAN::class, "site_code", "site_code");
     }
     public function xpics()
     {
-        return $this->hasMany(XPIC::class,"site_code","site_code");
+        return $this->hasMany(XPIC::class, "site_code", "site_code");
     }
     public function ip_traffics()
     {
-        return $this->hasMany(IP_traffic::class,"site_code","site_code");
+        return $this->hasMany(IP_traffic::class, "site_code", "site_code");
     }
     public function instrument()
     {
-        return $this->hasOne(Instrument::class,"site_code","site_code");
+        return $this->hasOne(Instrument::class, "site_code", "site_code");
     }
-    
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['*']);
-       
-    }
+
+   
     protected function siteCode(): Attribute
     {
         return Attribute::make(
-            get: function($value){
-              return strtoupper($value);
+            get: function ($value) {
+                return strtoupper($value);
             }
         );
     }

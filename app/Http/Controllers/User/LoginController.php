@@ -17,7 +17,7 @@ use Stevebauman\Location\Facades\Location;
 
 class LoginController extends Controller
 {
-  
+
 
     public function login(Request $request)
 
@@ -32,36 +32,36 @@ class LoginController extends Controller
                 "errors" => $validator->getMessageBag()
             ], 422);
         } else {
-            if (!Auth::attempt(['email' => $request->input("email"), 'password' =>  $request->input("password")])) {
-                return response()->json([
-                    "message" => "invalid Credentials",
+            $validated = $validator->validated();
+            $user = User::where("email", $validated["email"])->first();
+            if ($user) {
+                if ($user->email_verified_at != null) {
+                    if (!Auth::attempt(['email' => $request->input("email"), 'password' =>  $request->input("password")])) {
+                        return response()->json([
+                            "message" => "invalid Credentials",
 
-                ], 401);
+                        ], 422);
+                    } else {
+                        $token = $request->user()->createToken($request->input("email"));
+                        $user = User::where("id", Auth::user()->id)->first();
+                        $user_data["user"] = $user;
+                        $user_data["token"] = $token;
+                        return response()->json(
+                            ["message" => "User loged in successfully","user_data"=> $user_data],
+
+                            200
+                        );
+                    }
+                } else {
+                    return response()->json([
+                        "message" => "Account is not verified yet"
+                    ], 200);
+                }
             } else {
-                $token = $request->user()->createToken($request->input("email"));
-                $roles = User::find(Auth::user()->id)->roles;
-              
-                $permissions =  User::find(Auth::user()->id)->permissions;
-                // foreach ($roles as $role) {
-                //     $permission = Role::find($role->id)->permissions;
-                //     array_push($permissions, $permission);
-                // }
-           
-                $user = User::where("id", Auth::user()->id)->first();
-              
-                $data = [];
-                $user_data = [];
-                $user_data["user"] = $user;
-                $user_data["roles"] = $roles;
-                $user_data["permissions"] = $permissions;
-                $user_data["token"] = $token;
-                $data["user_data"] = $user_data;
-              
 
-                return response()->json(
-                    $data,
-                    200
-                );
+                return response()->json([
+                    "message" => "This email address does not exist"
+                ], 200);
             }
         }
     }

@@ -12,10 +12,7 @@ use App\Models\Modifications\Modification;
 
 class ModificationsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("role:super-admin|admin");
-    }
+    
     private function get_column_values($column_name)
     {
 
@@ -47,6 +44,7 @@ class ModificationsController extends Controller
 
     public function index($colmnName, $colmnValue)
     {
+        $this->authorize("viewAny",Modification::class);
         $data = [
             "columnName" => $colmnName,
             "columnValue" => $colmnValue
@@ -84,6 +82,7 @@ class ModificationsController extends Controller
 
     public function modificationDetails($id)
     {
+        $this->authorize("viewAny",Modification::class);
         if ($id == "null") {
             $id = null;
         }
@@ -119,6 +118,7 @@ class ModificationsController extends Controller
 
     public function modificationUpdate(Request $request)
     {
+        $this->authorize("update",Modification::class);
         $ruls = [
             "id" => ['required', "exists:modifications,id"],
             "site_code" => "required|exists:modifications,site_code",
@@ -174,6 +174,7 @@ class ModificationsController extends Controller
 
     public function siteModifications($site_code)
     {
+        $this->authorize("viewAny",Modification::class);
         if ($site_code == "null") {
             $site_code = null;
         }
@@ -233,6 +234,7 @@ class ModificationsController extends Controller
 
     public function newModification(Request $request)
     {
+        $this->authorize("create",Modification::class);
         
         $ruls = [
             "site_code" => "required|exists:sites,site_code",
@@ -289,6 +291,7 @@ class ModificationsController extends Controller
 
     public function deleteModification(Request $request)
     {
+        $this->authorize("delete",Modification::class);
         $ruls = [
             "id" => "required|exists:modifications,id",
 
@@ -323,6 +326,7 @@ class ModificationsController extends Controller
 
     public function download(Request $request)
     {
+        $this->authorize("viewAny",Modification::class);
         $ruls = [
             "column_name" => ["required"],
             "column_value" => ["required"],
