@@ -6,8 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.1.0",
-        "alexjustesen/filament-spatie-laravel-activitylog": "0.7",
-        "filament/filament": "^3.0-stable",
+      
+        "doctrine/dbal": "3.7.2",
+      
         "guzzlehttp/guzzle": "^7.2",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^10.0",

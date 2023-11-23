@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
 HeadingRowFormatter::default('none');
 
-class HightempAlarmsImport implements ToModel ,WithHeadingRow ,WithBatchInserts ,WithChunkReading,WithValidation
+class HighTempAlarmsImport implements ToModel ,WithHeadingRow ,WithBatchInserts ,WithChunkReading,WithValidation
 {
   
     /**
