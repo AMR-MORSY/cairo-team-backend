@@ -19,7 +19,7 @@ class ResetPasswordController extends Controller
     public function sendToken(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "email" => 'required'
+            "email" => 'required|email'
 
         ]);
         $validated = $validator->validated();
@@ -27,27 +27,25 @@ class ResetPasswordController extends Controller
             return response()->json([
                 $validator->getMessageBag(),
             ], 422);
-        }
-        if ($validated) {
-            $user = User::where('email', $validated['email'])->first();
-        }
-
-
-        if ($user) {
-            $token = Str::random(32);
-            $url = $request->host();
-            Mail::to($user)->send(new ResetPasswordMailable($token, $url));
-            $password_reset = new PasswordReset();
-            $password_reset->email = $user->email;
-            $password_reset->token = $token;
-            $password_reset->save();
         } else {
+            $user = User::where('email', $validated['email'])->first();
 
-            $emailError["email"] = "Email does not exist";
+            if ($user) {
+                $token = Str::random(32);
+                $url = $request->host();
+                Mail::to($user)->send(new ResetPasswordMailable($token, $url));
+                $password_reset = new PasswordReset();
+                $password_reset->email = $user->email;
+                $password_reset->token = $token;
+                $password_reset->save();
+            } else {
 
-            return response()->json([
-                "errors" => $emailError,
-            ], 422);
+                $emailError["email"] = "Email does not exist";
+
+                return response()->json([
+                    "errors" => $emailError,
+                ], 422);
+            }
         }
     }
     public function validateToken(Request $request)
@@ -76,8 +74,8 @@ class ResetPasswordController extends Controller
 
             $user = User::where("email", $password_reset->email)->first();
             $user->email_verified_at = Carbon::now();
-            $user->remember_token=null;
-           
+            $user->remember_token = null;
+
             $user->save();
             return response()->json($user, 200);
         }

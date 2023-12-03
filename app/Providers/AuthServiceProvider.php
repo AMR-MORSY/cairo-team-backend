@@ -12,6 +12,8 @@ use App\Policies\ModificationPolicy;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Transmission\IP_traffic;
 use App\Models\Modifications\Modification;
+use App\Models\Users\User;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         WAN::class=>WANPolicy::class,
         XPIC::class=>XPICPolicy::class,
         IP_traffic::class=>IP_trafficPolicy::class,
+        User::class=>UserPolicy::class,
         "App\Models\Model\Modifications\Modification"=>'App\Policies\ModificationPolicy',
     ];
 

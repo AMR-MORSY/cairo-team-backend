@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NUR\NUR2GController;
 use App\Http\Controllers\NUR\NUR3GController;
@@ -42,9 +42,45 @@ use App\Http\Controllers\Transmission\IP_traffic_Controller;
 
 Route::prefix("user")->middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout',[LogoutController::class,"logout"]);
+    
    
 
 });
+Route::prefix('admin')->group(function(){
+    Route::post('/signUp',[AdminController::class,"adminLogin"]);
+  
+});
+
+Route::prefix('admin')->middleware(['auth:sanctum'])->group(function(){
+    Route::post('/logout',[AdminController::class,"logout"]);
+    Route::get('/abilities',[AdminController::class,"userAbilities"]);
+    Route::get('/users',[AdminController::class,"users"]);
+    Route::get('/user/{id}',[AdminController::class,"user"]);
+    Route::get('/userwithrolesandpermissions/{id}',[AdminController::class,"userDataWithRolesAndPermissions"]);
+    Route::get('/roles',[AdminController::class,"roles"]);
+    Route::get ('/role/{id}',[AdminController::class,"viewRole"]);
+    Route::get ('/role/edit/{id}',[AdminController::class,"editRole"]);
+    Route::post ('/role/update',[AdminController::class,"updateRole"]);
+    Route::get ('/permissions',[AdminController::class,"permissions"]);
+     Route::get ('/permissions/delete/{id}',[AdminController::class,"deletePermission"]);
+    Route::post ('/role/create',[AdminController::class,"createRole"]);
+    Route::post ('/roles/permissions',[AdminController::class,"getRolesPermissionsByRoleName"]);
+    Route::post ('/permissions/create',[AdminController::class,"createPermission"]);
+    Route::post ('/user/role/update',[AdminController::class,"updateUserRoles"]);
+    
+    
+});
+
+Route::prefix("user")->group(function(){
+    Route::post("/register",[RegisterController::class,"register"]);
+    Route::get("/signUp/{code}",[RegisterController::class,"validateSignUpCode"]);
+    Route::post("/activateUserAccount",[RegisterController::class,"activateUserAccount"]);
+    Route::post("/login",[LoginController::class,"login"]);
+    Route::post("/sendToken",[ResetPasswordController::class,"sendToken"]);
+    Route::post("/validateToken",[ResetPasswordController::class,"validateToken"]);
+    Route::post("/resetPassword",[ResetPasswordController::class,"resetPassword"]);
+    // Route::post("refreshtoken",[LoginController::class,"refresh_token"]);
+    });
 
 
 Route::prefix("energysheet")->middleware(['auth:sanctum',"role:admin|super-admin"])->group(function(){
@@ -101,7 +137,7 @@ Route::prefix('sites')->middleware(['auth:sanctum',])->group(function(){
     Route::get('/search/{search}',[NormalUsersSitesController::class,"search"])->name("search_sites");
     Route::get('/details/{siteCode}',[NormalUsersSitesController::class,"siteDetails"])->name("site_details");
 });
-Route::prefix('Nur')->middleware(['auth:sanctum',"role:super-admin"])->group(function(){
+Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
     // Route::get('/newsitesinsert',[SitesController::class,"index"])->name("sites");
     Route::get('/index',[NurIndexController::class,"index"])->name("Nur_index");
     Route::post('/2G',[NUR2GController::class,"store"])->name("store_2G");
@@ -111,7 +147,7 @@ Route::prefix('Nur')->middleware(['auth:sanctum',"role:super-admin"])->group(fun
    
 
 });
-Route::prefix('Nur')->middleware(['auth:sanctum',"role:admin|super-admin"])->group(function(){
+Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
     Route::post('/siteNUR',[ShowNURController::class,"SiteNUR"])->name("siteNUR");
     Route::get('/show/{week}/{year}',[ShowNURController::class,"show_nur"])->name("show_nur");
     Route::post('/downloadNUR2G',[DownloadNURController::class,"NUR2G"])->name("site2GNUR");
@@ -133,16 +169,6 @@ Route::prefix('Nur')->middleware(['auth:sanctum',"role:admin|super-admin"])->gro
 
 });
 
-Route::prefix("user")->group(function(){
-Route::post("/register",[RegisterController::class,"register"]);
-Route::get("/signUp/{code}",[RegisterController::class,"validateSignUpCode"]);
-Route::post("/activateUserAccount",[RegisterController::class,"activateUserAccount"]);
-Route::post("/login",[LoginController::class,"login"]);
-Route::post("/sendToken",[ResetPasswordController::class,"sendToken"]);
-Route::post("/validateToken",[ResetPasswordController::class,"validateToken"]);
-Route::post("/resetPassword",[ResetPasswordController::class,"resetPassword"]);
-// Route::post("refreshtoken",[LoginController::class,"refresh_token"]);
-});
 
 Route::prefix("instruments")->middleware(['auth:sanctum'])->group(function(){
     Route::post('/siteBatteriesData',[InstrumentsController::class,"siteBatteriesData"]);
