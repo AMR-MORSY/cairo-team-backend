@@ -67,15 +67,14 @@ trait AuthAndAuthorization
 
         if (count($validated) > 0) {
             $user = User::where("email", $validated["email"])->first();
-            if ($user) {
-                if ($this->hasVerifiedEmail($user)) {
 
-                    return   $this->userAuthAttempt($validated);
-                } else {
-                    return response()->json([
-                        "message" => "Account is not verified yet"
-                    ], 200);
-                }
+            if ($this->hasVerifiedEmail($user)) {
+
+                return   $this->userAuthAttempt($validated);
+            } else {
+                return response()->json([
+                    "message" => "Account is not verified yet"
+                ], 200);
             }
         }
         return response()->json([

@@ -13,7 +13,7 @@ class GenAlarmPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo("read_Energy_data");
+        return $user->hasPermissionTo("read_ENERGY_data");
     }
 
     /**
@@ -29,7 +29,7 @@ class GenAlarmPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo("create_Energy_data");
+        return $user->hasPermissionTo("create_ENERGY_data");
     }
 
     /**
@@ -37,7 +37,7 @@ class GenAlarmPolicy
      */
     public function update(User $user): bool
     {
-        return $user->hasPermissionTo("update_Energy_data");
+        return $user->hasPermissionTo("update_ENERGY_data");
     }
 
     /**
@@ -45,7 +45,7 @@ class GenAlarmPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->hasPermissionTo("delete_Energy_data");
+        return $user->hasPermissionTo("delete_ENERGY_data");
     }
 
     /**

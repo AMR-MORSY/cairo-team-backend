@@ -112,11 +112,10 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "id" => ["required", "exists:roles,id"],
-            "name" => ["required", "regex:/^[a-zA-Z]{3,}[a-zA-Z_-]*$/", "min:3", "max:30", "unique:roles"],
-            "selectedRollPermissions" => ["required", "array"],
-            "selectedRollPermissions.*" => ["required", "exists:permissions,name"],
-            "selectedDiffPermissions" => ["array"]
-
+            "name" => ["required", "exists:roles,name"],
+            "rolePermissions" => ["required", "array"],
+            "rolePermissions.*" => ["required", "exists:permissions,name"],
+           
 
         ]);
         if ($validator->fails()) {
@@ -128,16 +127,7 @@ class AdminController extends Controller
         } else {
             $validated = $validator->validated();
             $role = Role::find($validated["id"]);
-            if (count($validated["selectedDiffPermissions"]) > 0) {
-                foreach ($validated["selectedDiffPermissions"] as $permission) {
-                    array_push($validated["selectedRollPermissions"], $permission);
-                }
-                $role->syncPermissions($validated["selectedRollPermissions"]);
-            } else {
-
-
-                $role->syncPermissions($validated["selectedRollPermissions"]);
-            }
+            $role->syncPermissions($validated["rolePermissions"]);
             return response()->json([
                 "success" => true,
                 "role" => $role

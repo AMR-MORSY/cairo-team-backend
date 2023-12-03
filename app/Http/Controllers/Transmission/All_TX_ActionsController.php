@@ -94,6 +94,7 @@ class All_TX_ActionsController extends Controller
     }
     public function searchTxIssues($fromDate, $toDate, $issue)
     {
+        $this->authorize("viewAny",WAN::class);
         $data = [
             "fromDate" => $fromDate,
             "toDate" => $toDate,
