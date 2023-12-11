@@ -2,6 +2,7 @@
 
 namespace App\Traits\Admin;
 
+use App\Http\Controllers\Admin\ActivitiesController;
 use App\Models\Users\User;
 
 use Spatie\Permission\Models\Permission;
@@ -21,12 +22,14 @@ trait Users
     public function retrievUserData($id)
     {
         $user = User::find($id);
-        $userRoles=$user->roles;
-        $allRoles=$this->retrieveAllRoles();
         $data = [];
         if ($user) {
+            $userRoles=$user->roles;
+            $Activities=new ActivitiesController;
+            $userActivities=$Activities->userActivities($id);
+            $allRoles=$this->retrieveAllRoles();
             $data["user"] = $user->toArray();
-           
+            $data["user_activities"]=$userActivities;
             $data["user_roles"] = $userRoles;
             $data["roles_diff"]=$allRoles->diff($userRoles);
 

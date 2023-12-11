@@ -6,9 +6,11 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Jenssegers\Agent\Agent;
 
 trait AuthAndAuthorization
 {
+   
 
     public function hasVerifiedEmail($user)
     {
@@ -21,7 +23,7 @@ trait AuthAndAuthorization
     {
         $validator = Validator::make($credintials, [
             "email" => "required|email|exists:users,email",
-            "password" => ['required', "regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"]
+            "password" => ['required']
 
         ], [
             'email.exists' => 'Email does not exist!',
@@ -51,8 +53,15 @@ trait AuthAndAuthorization
 
             $user = User::where("id", Auth::user()->id)->first();
             $token = $user->createToken($validated["email"]);
+            $agent = new Agent();
+            $platform = $agent->platform();
+            $device = $agent->device();
+           $desktop= $agent->isDesktop();
             $user_data["user"] = $user;
             $user_data["token"] = $token;
+            $user_data["platform"]=$platform;
+            $user_data["device"]=$device;
+            $user_data["desktop"]=$desktop;
             return response()->json(
                 ["message" => "User loged in successfully", "user_data" => $user_data],
 

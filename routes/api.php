@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivitiesController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NUR\NUR2GController;
@@ -49,6 +50,14 @@ Route::prefix("user")->middleware(['auth:sanctum'])->group(function(){
 Route::prefix('admin')->group(function(){
     Route::post('/signUp',[AdminController::class,"adminLogin"]);
   
+});
+Route::prefix('activities')->middleware(['auth:sanctum'])->group(function(){
+    Route::get('/modifications',[ActivitiesController::class,"modificationsActivities"]);
+    Route::get('/modifications/{id}',[ActivitiesController::class,"modificationActivityData"]);
+    Route::get('/wans',[ActivitiesController::class,"wanActivities"]);
+    Route::get('/XPICS',[ActivitiesController::class,"XPICActivities"]);
+    Route::get('/IPS',[ActivitiesController::class,"IPActivities"]);
+    Route::get('/transmissions/{id}',[ActivitiesController::class,"transmissionActivityData"]);
 });
 
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function(){

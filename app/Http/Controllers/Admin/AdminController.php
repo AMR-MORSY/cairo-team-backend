@@ -254,25 +254,8 @@ class AdminController extends Controller
             ],200);
         }
     }
-    // public function userDataWithRolesAndPermissions($id)
-    // {
-    //     $userData = $this->retrievUserData($id);
-    //     if (count($userData) > 0) {
-    //         $perissions = $this->retrieveAllPermissions();
-    //         $roles = $this->retrieveAllRoles();
-    //         return response()->json([
-    //             "success" => true,
-    //             "user" => $userData,
-    //             "permissions" => $perissions,
-    //             "roles" => $roles
-    //         ], 200);
-    //     }
-    //     return response()->json([
-    //         "success" => false,
-    //         "message" => "user does not exits"
-
-    //     ], 422);
-    // }
+   
+   
     public function user($id)
     {
         $userData = $this->retrievUserData($id);
@@ -307,7 +290,7 @@ class AdminController extends Controller
             } else {
                 return response()->json([
                     "message" => "User does not has the right to access this panel"
-                ], 422);
+                ], 402);
             }
         }
         return response()->json([
