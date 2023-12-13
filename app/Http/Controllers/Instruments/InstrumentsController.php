@@ -38,7 +38,9 @@ class InstrumentsController extends Controller
                     "battery_amp_hr" => $instrument->battery_amp_hr,
                     "no_strings" => $instrument->no_strings,
                     "no_batteries" => $instrument->no_batteries,
-                    "batteries_status" => $instrument->batteries_status
+                    "batteries_status" => $instrument->batteries_status,
+                    "batt_inst_date"=>$instrument->batt_inst_date
+
 
                 ], 200);
             } else {
@@ -62,6 +64,7 @@ class InstrumentsController extends Controller
             "no_strings" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
             "no_batteries" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
             "batteries_status" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "batt_inst_date"=>["nullable","date"],
 
 
         ]);
@@ -79,6 +82,7 @@ class InstrumentsController extends Controller
                 $instrument->no_strings = $validated["no_strings"];
                 $instrument->no_batteries =$validated ['no_batteries'];
                 $instrument->batteries_status = $validated["batteries_status"];
+                $instrument->batt_inst_date=$validated['batt_inst_date'];
 
                 $instrument->save();
 
