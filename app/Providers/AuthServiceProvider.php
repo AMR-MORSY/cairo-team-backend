@@ -4,38 +4,42 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
-use App\Models\EnergySheet\DownAlarm;
-use App\Models\EnergySheet\GenAlarm;
-use App\Models\EnergySheet\HighTempAlarm;
-use App\Models\EnergySheet\PowerAlarm;
-use App\Models\Instruments\Instrument;
-use App\Policies\WANPolicy;
-use App\Policies\XPICPolicy;
-use App\Models\Transmission\XPIC;
-use App\Policies\IP_trafficPolicy;
-use App\Policies\ModificationPolicy;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Transmission\IP_traffic;
-use App\Models\Modifications\Modification;
 use App\Models\NUR\NUR2G;
 use App\Models\NUR\NUR3G;
 use App\Models\NUR\NUR4G;
+use App\Models\Sites\Site;
 use App\Models\Users\User;
-use App\Policies\DownAlarmPolicy;
-use App\Policies\GenAlarmPolicy;
-use App\Policies\HighTempAlarmPolicy;
-use App\Policies\InstrumentPolicy;
-use App\Policies\NUR2GPolicy;
-use App\Policies\NUR3GPolicy;
-use App\Policies\NUR4GPolicy;
-use App\Policies\PermissionPolicy;
-use App\Policies\PowerAlarmPolicy;
+use App\Policies\WANPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\SitePolicy;
 use App\Policies\UserPolicy;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Spatie\Permission\Models\Permission;
+use App\Policies\XPICPolicy;
+use App\Policies\NUR2GPolicy;
+use App\Policies\NUR3GPolicy;
+use App\Policies\NUR4GPolicy;
+use App\Policies\BatteryPolicy;
+use App\Models\Transmission\WAN;
+use App\Policies\GenAlarmPolicy;
+use App\Models\Batteries\Battery;
+use App\Models\Transmission\XPIC;
+use App\Policies\DownAlarmPolicy;
+use App\Policies\InstrumentPolicy;
+use App\Policies\IP_trafficPolicy;
+use App\Policies\PermissionPolicy;
+use App\Policies\PowerAlarmPolicy;
 use Spatie\Permission\Models\Role;
+use App\Models\EnergySheet\GenAlarm;
+use App\Policies\ModificationPolicy;
+use Illuminate\Support\Facades\Gate;
+use App\Models\EnergySheet\DownAlarm;
+use App\Policies\HighTempAlarmPolicy;
+use App\Models\EnergySheet\PowerAlarm;
+use App\Models\Instruments\Instrument;
+use App\Models\Transmission\IP_traffic;
+use Spatie\Permission\Models\Permission;
+use App\Models\EnergySheet\HighTempAlarm;
+use App\Models\Modifications\Modification;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -62,6 +66,7 @@ class AuthServiceProvider extends ServiceProvider
         NUR4G::class=>NUR4GPolicy::class,
         Permission::class=>PermissionPolicy::class,
         Role::class=>RolePolicy::class,
+        Battery::class=>BatteryPolicy::class
 
       
     ];

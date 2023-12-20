@@ -37,6 +37,7 @@ class BatteriesController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize("create",Battery::class);
         $validator = Validator::make($request->all(),$this->rules);
         if ($validator->fails()) {
             return response()->json([
@@ -59,6 +60,7 @@ class BatteriesController extends Controller
      */
     public function show(Site $site)
     {
+        $this->authorize("viewAny",Battery::class);
         if($site)
         {
             $batteries=$site->batteries;
@@ -85,6 +87,7 @@ class BatteriesController extends Controller
      */
     public function update(Request $request, Battery $battery)
     {
+        $this->authorize("update",Battery::class);
         if($battery)
         {
             $validator = Validator::make($request->all(),$this->rules);
