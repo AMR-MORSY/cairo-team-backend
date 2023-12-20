@@ -2,6 +2,7 @@
 
 namespace App\Models\Sites;
 
+use App\Models\Batteries\Battery;
 use App\Models\Nodal;
 use App\Models\Transmission\WAN;
 use App\Models\Transmission\XPIC;
@@ -57,5 +58,10 @@ class Site extends Model
                 return strtoupper($value);
             }
         );
+    }
+
+    public function batteries()
+    {
+        return $this->hasMany(Battery::class, "site_code", "site_code");
     }
 }

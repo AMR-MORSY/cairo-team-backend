@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivitiesController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Batteries\BatteriesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NUR\NUR2GController;
 use App\Http\Controllers\NUR\NUR3GController;
@@ -206,17 +207,24 @@ Route::prefix('sites')->group(function(){
 
 Route::prefix("Transmission")->middleware(["auth:sanctum"])->group(function(){
   
-    Route::get("getSiteTXIssues/{site_code}",[All_TX_ActionsController::class,"getSiteTXIssues"]);
-    Route::get("searchTxIssues/{fromDate}/{toDate}/{issue}",[All_TX_ActionsController::class,"searchTxIssues"]);
+    Route::get("/getSiteTXIssues/{site_code}",[All_TX_ActionsController::class,"getSiteTXIssues"]);
+    Route::get("/searchTxIssues/{fromDate}/{toDate}/{issue}",[All_TX_ActionsController::class,"searchTxIssues"]);
   
 
 });
 Route::prefix("Transmission")->middleware(["auth:sanctum","permission:store_TX_data"])->group(function(){
-    Route::post("updateSiteIP_trafics",[IP_traffic_Controller::class,"updateSiteIP_trafics"]);
-    Route::post("updateSiteXPICs",[XPICController::class,"updateSiteXPICs"]);
-    Route::post("updateSiteWAN",[WANController::class,"updateSiteWAN"]);
-    Route::post("storeSiteIP_trafic",[IP_traffic_Controller::class,"storeSiteIP_trafic"]);
-    Route::post("storeSiteWAN",[WANController::class,"storeSiteWAN"]);
-    Route::post("storeSiteXPICs",[XPICController::class,"storeSiteXPICs"]);
+    Route::post("/updateSiteIP_trafics",[IP_traffic_Controller::class,"updateSiteIP_trafics"]);
+    Route::post("/updateSiteXPICs",[XPICController::class,"updateSiteXPICs"]);
+    Route::post("/updateSiteWAN",[WANController::class,"updateSiteWAN"]);
+    Route::post("/storeSiteIP_trafic",[IP_traffic_Controller::class,"storeSiteIP_trafic"]);
+    Route::post("/storeSiteWAN",[WANController::class,"storeSiteWAN"]);
+    Route::post("/storeSiteXPICs",[XPICController::class,"storeSiteXPICs"]);
+
+});
+
+Route::prefix("batteries")->middleware(["auth:sanctum"])->group(function(){
+    Route::get("/{site}",[BatteriesController::class,"show"]);
+    Route::post("/store",[BatteriesController::class,"store"]);
+    Route::put("/{battery}",[BatteriesController::class,"update"]);
 
 });

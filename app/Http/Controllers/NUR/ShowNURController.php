@@ -48,7 +48,7 @@ class ShowNURController extends Controller
                 return response()->json([
                     "errors" => $weeklyNUR['errors'],
 
-                ], 204);
+                ], 200);
             } else {
                 return response()->json([
 
@@ -111,7 +111,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],204);
+            ],200);
            
           
         } else {
@@ -146,7 +146,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],204);
+            ],200);
            
           
         } else {
@@ -181,7 +181,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],204);
+            ],200);
            
           
         } else {
@@ -215,7 +215,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],204);
+            ],200);
            
           
         } else {
@@ -249,7 +249,7 @@ class ShowNURController extends Controller
         if (count($errors) > 0) {
             return response()->json([
                 "errors"=>$errors
-            ],204);
+            ],200);
            
           
         } else {
