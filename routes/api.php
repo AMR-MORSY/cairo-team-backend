@@ -226,5 +226,6 @@ Route::prefix("batteries")->middleware(["auth:sanctum"])->group(function(){
     Route::get("/{site}",[BatteriesController::class,"show"]);
     Route::post("/store",[BatteriesController::class,"store"]);
     Route::put("/{battery}",[BatteriesController::class,"update"]);
+    Route::delete("/{battery}",[BatteriesController::class,"destroy"]);
 
 });

@@ -2,10 +2,11 @@
 
 namespace App\Models\Modifications;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Sites\Site;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Modification extends Model 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("site_code",50);
             $table->foreign('site_code')->references('site_code')->on('sites')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("batteries_brand",50);
-            $table->date("installation_date");
+            $table->date("installation_date")->nullable();
             $table->integer("no_strings");
             $table->enum("category",["New","Tested","Used"])->default("New");
             $table->string("stock",50)->nullable();
