@@ -23,15 +23,23 @@ class NUR3GImport implements ToModel, WithHeadingRow,WithValidation
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public  $week, $year,$network_cells;
+    public $week, $year, $technology_cells,$total_net_cells;
 
-    public function __construct($week, $year,$network_cells)
+
+
+    public function __construct($week, $year, $cells,$total_net_cells)
     {
         $this->week = $week;
         $this->year = $year;
-        $this->network_cells=$network_cells;
+        $this->technology_cells = $cells;
+        $this->total_net_cells=$total_net_cells;
     }
- 
+
+    private function calculateWeeklyCombinedNUR($NUR)
+    {
+        return ($NUR*$this->technology_cells)/$this->total_net_cells;
+
+    }
     public function rules(): array
     {
         return [
@@ -71,10 +79,11 @@ class NUR3GImport implements ToModel, WithHeadingRow,WithValidation
        
         $duration_min = Durations::DurationMin($row['Incident Start Time'], $row['Incident End Time']);
         $duration_hr = Durations::DurationHr($duration_min);
-        $weekly_nur = new WeeklyNUR($duration_min, $row['No of cells'], $this->network_cells);
+        $weekly_nur = new WeeklyNUR($duration_min, $row['No of cells'], $this->technology_cells);
+        $combinedNUR=$this->calculateWeeklyCombinedNUR($weekly_nur);
         $month_as_number = Durations::getMonth($row['Incident Start Time']);
         $days_of_month = Durations::calculate_month_days($month_as_number);
-        $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['No of cells'], $this->network_cells);
+        $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['No of cells'], $this->technology_cells);
         return new NUR3G([
             "impacted_sites"=>$row["Site Name (Node B)"],
             "RNC"=>strtolower( $row["RNC"]),
@@ -86,13 +95,14 @@ class NUR3GImport implements ToModel, WithHeadingRow,WithValidation
             'problem_site_name'=>$row["Problem source site name"],
             "week"=>$this->week,
             "year"=>$this->year,
-            "network_cells"=>$this->network_cells,
+            "network_cells_3G"=>$this->technology_cells,
             "system"=>strtolower($row['System']) ,
             "sub_system"=>strtolower($row["Sub System"]) ,
             "nur"=>$weekly_nur->calculate_NUR(),
             'Dur_min'=> $duration_min,
             'Dur_Hr'=>  $duration_hr,
             'type'=>$row['Type'],
+            "nur_c"=>$combinedNUR,
             'solution'=>strtolower($row['Solution']) ,
             "gen_owner"=>strtolower($row["Generator Owner"]) ,
             "access"=>$row['Access Problem'],

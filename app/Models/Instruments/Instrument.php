@@ -23,7 +23,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value,$attributes){
+            get: function ( $value,$attributes){
                 if($value==0)
                 {
                     return "No";
@@ -36,8 +36,8 @@ class Instrument extends Model
                 }
             
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -56,7 +56,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -69,8 +69,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -89,7 +89,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -102,8 +102,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -122,7 +122,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -135,8 +135,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -157,7 +157,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -170,8 +170,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -192,7 +192,7 @@ class Instrument extends Model
     {
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -205,8 +205,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -227,7 +227,7 @@ class Instrument extends Model
         
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -240,8 +240,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 
@@ -263,7 +263,7 @@ class Instrument extends Model
         
         return Attribute::make(
            
-            get: function (string $value){
+            get: function ( $value){
                 if($value==0)
                 {
                     return "No";
@@ -276,8 +276,8 @@ class Instrument extends Model
                 }
 
             },
-            set: function (string $value){
-                if($value=="No")
+            set: function ( $value){
+                if($value=="No" or $value==null)
                 {
                     return 0;
 

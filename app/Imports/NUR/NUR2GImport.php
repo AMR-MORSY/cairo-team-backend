@@ -26,15 +26,16 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public $week, $year, $network_cells;
+    public $week, $year, $technology_cells,$total_net_cells;
 
 
 
-    public function __construct($week, $year, $cells)
+    public function __construct($week, $year, $cells,$total_net_cells)
     {
         $this->week = $week;
         $this->year = $year;
-        $this->network_cells = $cells;
+        $this->technology_cells = $cells;
+        $this->total_net_cells=$total_net_cells;
     }
 
 
@@ -63,6 +64,12 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
 
         ];
     }
+
+    private function calculateWeeklyCombinedNUR($NUR)
+    {
+        return ($NUR*$this->technology_cells)/$this->total_net_cells;
+
+    }
     public function model(array $row)
     {
         if (strtolower($row["Operation Zone"])=="delta north"||
@@ -78,10 +85,11 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
        
         $duration_min = Durations::DurationMin($row['Begin'], $row['End']);
         $duration_hr = Durations::DurationHr($duration_min);
-        $weekly_nur = new WeeklyNUR($duration_min, $row['Cells'], $this->network_cells);
+        $weekly_nur = new WeeklyNUR($duration_min, $row['Cells'], $this->technology_cells);
+        $combinedNUR=$this->calculateWeeklyCombinedNUR($weekly_nur);
         $month_as_number = Durations::getMonth($row['Begin']);
         $days_of_month = Durations::calculate_month_days($month_as_number);
-        $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['Cells'], $this->network_cells);
+        $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['Cells'], $this->technology_cells);
         return new NUR2G([
             "impacted_sites" => $row["Site name"],
             "BSC" => strtolower( $row["BSC"]),
@@ -99,12 +107,13 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
             'Dur_min' => $duration_min,
             'Dur_Hr' => $duration_hr,
             'type' => $row['Type'],
+            "nur_c"=>$combinedNUR,
             'solution' => strtolower($row['Solution']),
             "access" => $row['Access Problem'],
             'Force_Majeure' => $row['Force Majeure'],
             'Force_Majeure_type' => $row['Force Majeure Type'],
             'month' => $month_as_number,
-            "network_cells"=>$this->network_cells,
+            "network_cells_2G"=>$this->technology_cells,
             "gen_owner"=> strtolower($row["Generator Owner"]) ,
             'monthly_nur' => $monthly_nur->calculate_monthly_nur(),
 

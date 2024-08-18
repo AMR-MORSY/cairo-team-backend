@@ -94,9 +94,9 @@ class SuperAdminSitesController extends Controller
              "office"=>["nullable", "string"],
              "severity"=>['nullable',"regex:/^Golden|Bronze|Silver$/"],
              "category"=>['nullable',"regex:/^Normal|BSC|NDL|LDN|VIP+NDL|VIP$/"],
-             "type"=>['nullable','regex:/^Shelter|Micro|Outdoor$/'],
+             "type"=>['nullable','regex:/^Macro|Micro|Indoor|Pico|Mobile Station$/'],
              "sharing"=>['nullable',"regex:/^Yes|No$/"],
-             "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza$/'],
+             "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza|North Upper|Red Sea|South Upper|Sinai|ALEX|NORTH COAST|Delta South|Delta North$/'],
              "host"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
              "gest"=>['nullable',"regex:/^VF|OG||ET||WE|ET+VF|ET+WE|ET+VF+WE|VF+WE$/"],
              "2G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
@@ -156,21 +156,23 @@ class SuperAdminSitesController extends Controller
     {
 
         $ruls=[
-           "site_code"=>["required","unique:sites,site_code","regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))$/"],
+           "site_code"=>["required","unique:sites,site_code","regex:/^([0-9a-zA-Z]{4,6}(up|UP))|([0-9a-zA-Z]{4,6}(ca|CA))|([0-9a-zA-Z]{4,6}(de|DE))|([0-9a-zA-Z]{4,6}(al|AL))|([0-9a-zA-Z]{4,6}(re|RE))|([0-9a-zA-Z]{4,6}(si|SI))$/"],
            "site_name"=>["required", "regex:/^([0-9a-zA-Z_-]){2,60}$/"],
            " BSC"=>["nullable", "regex:/^([0-9a-zA-Z_-]){3,50}$/"],
             "RNC"=>["nullable", "regex:/^([0-9a-zA-Z_-]){3,50}$/"],
             "office"=>["nullable", "string"],
             "severity"=>['nullable',"regex:/^Golden|Bronze|Silver$/"],
             "category"=>['nullable',"regex:/^Normal|BSC|NDL|LDN|VIP+NDL|VIP$/"],
-            "type"=>['nullable','regex:/^Shelter|Micro|Outdoor$/'],
+          "type"=>['nullable','regex:/^Macro|Micro|Indoor|Pico|Mobile Station$/'],
             "sharing"=>['nullable',"regex:/^Yes|No$/"],
-            "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza$/'],
+            "oz"=>['nullable','regex:/^Cairo South|Cairo East|Cairo North|Giza|North Upper|Red Sea|South Upper|Sinai|ALEX|NORTH COAST|Delta South|Delta North$/'],
             "host"=>['nullable',"regex:/^VF|OG||ET||WE$/"],
             "gest"=>['nullable',"regex:/^VF|OG||ET||WE|ET+VF|ET+WE|ET+VF+WE|VF+WE$/"],
             "2G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
             "3G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
             "4G_cells"=> ["nullable", "regex:/^[1-9][0-9]?$|^100$|^0$/"],
+           
+            
         ];
         $validator = Validator::make($request->all(), $ruls);
         

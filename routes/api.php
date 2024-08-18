@@ -195,7 +195,9 @@ Route::prefix("instruments")->middleware((["auth:sanctum","role:admin|super-admi
     Route::post('/updateMWData',[InstrumentsController::class,"updateMWData"]);
     Route::post('/updateBatteriesData',[InstrumentsController::class,"updateSiteBatteriesData"]);
     Route::post('/updateRectifierData',[InstrumentsController::class,"updateRectifierData"]);
+    Route::post('/insertRectifierData',[InstrumentsController::class,"insertRectifierData"]);
     Route::post('/updateSiteDeepData',[InstrumentsController::class,"updateSiteDeepData"]);
+    Route::post('/insertSiteDeepData',[InstrumentsController::class,"insertSiteDeepData"]);
     Route::post('/updateSiteBTSData',[InstrumentsController::class,"updateSiteBTSData"]);
     Route::post('/updateSitePowerData',[InstrumentsController::class,"updateSitePowerData"]);
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class NUR2G extends Model
 {
     use HasFactory;
-    protected $table="2g-nurs";
+    protected $table="2g_nurs";
     protected $guarded=[];
 
     protected function subSystem(): Attribute

@@ -187,6 +187,35 @@ class InstrumentsController extends Controller
             }
         }
     }
+
+    public function insertRectifierData(Request $request)
+    {
+        $this->authorize("store",Instrument::class);
+        $validator = Validator::make($request->all(), [
+            "site_code" => ['required', "exists:instruments,id"],
+            "rec_brand" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "module_capacity" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "no_module" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "pld_value" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "net_eco" =>  ['nullable', 'regex:/^Yes|No$/'],
+            "net_eco_activation" =>  ['nullable', 'ip'],
+
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->getMessageBag(),
+            ], 422);
+        } else {
+            $validated = $validator->validated();
+            Instrument::create($validated);
+            return response()->json([
+                "message"=>"inserted successfully"
+            ]);
+
+        }
+
+    }
     public function siteDeepData(Request $request)
     {
         $this->authorize("viewAny",Instrument::class);
@@ -298,6 +327,44 @@ class InstrumentsController extends Controller
                 ], 204);
             }
         }
+    }
+    public function insertSiteDeepData(Request $request)
+    {
+        $this->authorize("store",Instrument::class);
+        $validator = Validator::make($request->all(), [
+            "site_code" => ['required', "exists:instruments,id"],
+            "on_air_date" => ['nullable', 'date'],
+            "topology" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "ntra_cluster" =>   ['nullable', 'regex:/^Yes|No$/'],
+            "care_ceo" =>  ['nullable', 'regex:/^Yes|No$/'],
+            "axsees" =>  ['nullable', 'regex:/^Yes|No$/'],
+            "serve_compound" =>   ['nullable', 'regex:/^Yes|No$/'],
+            "no_ldn_accounts" =>   ['nullable', 'integer', 'max:50'],
+            "no_tp_accounts" =>  ['nullable', 'integer', 'max:50'],
+            "ac1_type" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "ac1_hp" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "ac2_type" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "ac2_hp" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "network_type" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "last_pm_date" => ['nullable', 'date'],
+            "need_access_permission" => ['nullable', 'regex:/^Yes|No$/'],
+            "permission_type" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->getMessageBag(),
+            ], 422);
+        } else {
+            $validated = $validator->validated();
+            Instrument::create($validated);
+            return response()->json([
+                "message"=>"inserted successfully"
+            ]);
+
+        }
+
     }
 
     public function siteMWData(Request $request)
