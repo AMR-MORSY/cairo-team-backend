@@ -65,11 +65,7 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
         ];
     }
 
-    private function calculateWeeklyCombinedNUR($NUR)
-    {
-        return ($NUR*$this->technology_cells)/$this->total_net_cells;
-
-    }
+   
     public function model(array $row)
     {
         if (strtolower($row["Operation Zone"])=="delta north"||
@@ -85,8 +81,8 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
        
         $duration_min = Durations::DurationMin($row['Begin'], $row['End']);
         $duration_hr = Durations::DurationHr($duration_min);
-        $weekly_nur = new WeeklyNUR($duration_min, $row['Cells'], $this->technology_cells);
-        $combinedNUR=$this->calculateWeeklyCombinedNUR($weekly_nur);
+        $weekly_nur = WeeklyNUR::calculate_NUR($duration_min, $row['Cells'], $this->technology_cells);
+        $combinedNUR=WeeklyNUR::calculateCombinedNUR ($weekly_nur,$this->technology_cells,$this->total_net_cells);
         $month_as_number = Durations::getMonth($row['Begin']);
         $days_of_month = Durations::calculate_month_days($month_as_number);
         $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['Cells'], $this->technology_cells);
@@ -103,7 +99,8 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
             "year" => $this->year,
             "system" => strtolower($row['System']) ,
             "sub_system" => strtolower($row["Sub system"]) ,
-            "nur" => $weekly_nur->calculate_NUR(),
+            "nur" => $weekly_nur,
+            'total_network_cells'=>$this->total_net_cells,
             'Dur_min' => $duration_min,
             'Dur_Hr' => $duration_hr,
             'type' => $row['Type'],

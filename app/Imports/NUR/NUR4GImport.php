@@ -74,8 +74,8 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
         }
         $duration_min = Durations::DurationMin($row['Incident Start Time'], $row['Incident End Time']);
         $duration_hr = Durations::DurationHr($duration_min);
-        $weekly_nur = new WeeklyNUR($duration_min, $row['No of cells'], $this->technology_cells);
-        $combinedNUR=$this->calculateWeeklyCombinedNUR($weekly_nur);
+        $weekly_nur = WeeklyNUR::calculate_NUR($duration_min, $row['Cells'], $this->technology_cells);
+        $combinedNUR=WeeklyNUR::calculateCombinedNUR ($weekly_nur,$this->technology_cells,$this->total_net_cells);
         $month_as_number = Durations::getMonth($row['Incident Start Time']);
         $days_of_month = Durations::calculate_month_days($month_as_number);
         $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['No of cells'], $this->technology_cells);
@@ -91,11 +91,12 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
             "year"=>$this->year,
             "system"=>strtolower($row['System']) ,
             "sub_system"=>strtolower($row["Sub System"]),
-            "nur"=>$weekly_nur->calculate_NUR(),
+            "nur"=>$weekly_nur,
             'Dur_min'=>  $duration_min,
             'Dur_Hr'=>  $duration_hr,
             'type'=>$row['Type'],
             "nur_c"=>$combinedNUR,
+            'total_network_cells'=>$this->total_net_cells,
             'solution'=>strtolower($row['Solution']) ,
             "gen_owner"=>strtolower( $row["Generator Owner"]),
             "access"=>$row['Access Problem'],
