@@ -9,18 +9,6 @@ class WeeklyNUR
 {
    
 
-    // protected int $duration_min,$cells, $total_network_cells;
-
-
-
-    // public function __construct(int $duration_min,int $cells,int $total_network_cells)
-    // {
-    //     $this->duration_min = $duration_min;
-    //     $this->cells=$cells;
-    //     $this->total_network_cells=$total_network_cells;
-
-       
-    // }
 
     public static function calculate_NUR(int $duration_min,int $cells,int $total_technology_cells)
 

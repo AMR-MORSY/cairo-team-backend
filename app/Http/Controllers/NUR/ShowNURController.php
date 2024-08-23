@@ -11,6 +11,7 @@ use App\Models\Sites\Site;
 use Illuminate\Support\Facades\Validator;
 use App\Services\NUR\NURStatestics\WeeklyStatestics;
 use App\Services\NUR\NURStatestics\YearlyStatestics;
+use App\Services\NUR\WeeklyNUR;
 use stdClass;
 
 
@@ -264,9 +265,28 @@ class ShowNURController extends Controller
         }
 
     }
+
+    private function collectAllWeekTickets($total_week_tickets_2G,$total_week_tickets_3G,$total_week_tickets_4G)
+    {
+       
+          
+            foreach($total_week_tickets_3G as $ticket)
+            {
+               $total_week_tickets_2G->push($ticket);
+            }
+            $allTickets=$total_week_tickets_2G;
+
+            foreach($total_week_tickets_4G as $ticket)
+            {
+                $allTickets->push($ticket);
+            }
+           
+           return $allTickets;
+
+    }
     private function getWeeklyNUR($week, $year)
     {
-        $total_week_tickets_2G = NUR2G::where('year', $year)->where('week', $week)->get();
+        $total_week_tickets_2G = NUR2G::where('year', $year)->where('week', $week)->get();/////collection
        
         $total_week_tickets_3G = NUR3G::where('year', $year)->where('week', $week)->get();
       
@@ -287,22 +307,39 @@ class ShowNURController extends Controller
             $notFound["errors"] = $errors;
             return $notFound;
         } else {
-            $network_2G_cells= $total_week_tickets_2G->first()->network_cells;
-            $network_3G_cells= $total_week_tickets_3G ->first()->network_cells;
-            $network_4G_cells=$total_week_tickets_4G ->first()->network_cells;
-            $statestics = new WeeklyStatestics($total_week_tickets_2G, $total_week_tickets_3G, $total_week_tickets_4G,$network_2G_cells,$network_3G_cells,$network_4G_cells);
-            $NUR['NUR2G'] = $statestics->NUR2GStatestics();
-            $NUR['NUR3G'] = $statestics->NUR3GStatestics();
-            $NUR['NUR4G'] = $statestics->NUR4GStatestics();
-            $NUR["zonesSubsystem"]=$statestics->zonesSubsystemNUR();
-            $NUR["zonesSubsystemCountTickts"]=$statestics->zonesSubsystemCountTickts();
-            $NUR["zonesResponseWithAccess"]=$statestics->zonesResponseWithAccess();
-            $NUR["zonesResponseWithoutAccess"]=$statestics->zonesResponseWithoutAccess();
-            $NUR["zonesGeneratorStatestics"]=$statestics->zonesGeneratorStatestics();
-            $NUR["topRepeated"] = $statestics->zonesTopRepeated();
-            $NUR["topNUR"] = $statestics->zonesTopNUR();
-            $NUR['combined'] = $statestics->combinedNUR();
-            return $NUR;
+            // $network_2G_cells= $total_week_tickets_2G->first()->network_cells_2G;
+            // $network_3G_cells= $total_week_tickets_3G->first()->network_cells_3G;
+            // $network_4G_cells=$total_week_tickets_4G->first()->network_cells_4G;
+            // $network_total_cells=$total_week_tickets_2G->first()->total_network_cells;
+            $allTickets=$this->collectAllWeekTickets($total_week_tickets_2G,$total_week_tickets_3G,$total_week_tickets_4G);
+           
+            // $statestics = new WeeklyStatestics($total_week_tickets_2G, $total_week_tickets_3G, $total_week_tickets_4G,$network_2G_cells,$network_3G_cells,$network_4G_cells);
+            // $NUR['NUR2G'] = $statestics->NUR2GStatestics();
+            // $NUR['NUR3G'] = $statestics->NUR3GStatestics();
+            // $NUR['NUR4G'] = $statestics->NUR4GStatestics();
+            // $NUR["zonesSubsystem"]=$statestics->zonesSubsystemNUR();
+            // $NUR["zonesSubsystemCountTickts"]=$statestics->zonesSubsystemCountTickts();
+            // $NUR["zonesResponseWithAccess"]=$statestics->zonesResponseWithAccess();
+            // $NUR["zonesResponseWithoutAccess"]=$statestics->zonesResponseWithoutAccess();
+            // $NUR["zonesGeneratorStatestics"]=$statestics->zonesGeneratorStatestics();
+            // $NUR["topRepeated"] = $statestics->zonesTopRepeated();
+            // $NUR["topNUR"] = $statestics->zonesTopNUR();
+            // $NUR['combined'] = $statestics->combinedNUR();
+            // return $NUR;
+
+            $NUR['NUR2G'] = WeeklyStatestics::NUR2GStatestics($total_week_tickets_2G);  
+            $NUR['NUR3G'] = WeeklyStatestics::NUR3GStatestics($total_week_tickets_3G);
+            $NUR['NUR4G'] = WeeklyStatestics::NUR4GStatestics($total_week_tickets_4G);
+            $NUR["zonesSubsystem"]=WeeklyStatestics::zonesSubsystemNUR($allTickets);
+            $NUR["zonesSubsystemCountTickts"]=WeeklyStatestics::zonesSubsystemCountTickts($allTickets);
+            $NUR["zonesResponseWithAccess"]=WeeklyStatestics::zonesResponseWithAccess($allTickets);
+            $NUR["zonesResponseWithoutAccess"]=WeeklyStatestics::zonesResponseWithoutAccess($allTickets);
+            $NUR["zonesGeneratorStatestics"]=WeeklyStatestics::zonesGeneratorStatestics($allTickets);
+            $NUR["topRepeated"] = WeeklyStatestics::zonesTopRepeated($allTickets);
+            $NUR["topNUR"] = WeeklyStatestics::zonesTopNUR($allTickets);
+             $NUR['combined'] = WeeklyStatestics:: combinedNUR($allTickets);
+             return $NUR;
+            
         }
     }
 

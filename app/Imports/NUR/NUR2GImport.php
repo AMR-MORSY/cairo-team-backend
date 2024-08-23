@@ -44,10 +44,10 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
     {
         return [
 
-            "*.Problem source site code" => ['string'],
-            "*.Site name" => ['string'],
+            "*.Problem source site code" => ['required','string'],
+            "*.Site name" => ['required','string'],
             "*.Problem source site name" => [ "string"],
-            "*.BSC" => ["required", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
+            "*.BSC" => ["nullable", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
             "*.Cells" => ["required", "regex:/^([1-9][0-9]{0,2}|1000)$/"],
             '*.System' => ['string'],
             "*.Sub system" => ['string'],
@@ -59,7 +59,8 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
             "*.Begin" => ["required", 'date'],
             "*.End" => ["required", "date"],
             "*.Operation Zone" => ["string"],
-            "*.Generator Owner"=>["nullable","regex:/^Shared|Orange|Rented$/"]
+            "*.Generator Owner"=>["nullable","regex:/^Shared|Orange|Rented$/"],
+            "*.Action OGS responsible"=>["nullable","string"]
 
 
         ];
@@ -87,6 +88,7 @@ class NUR2GImport implements ToModel, WithValidation,WithHeadingRow
         $days_of_month = Durations::calculate_month_days($month_as_number);
         $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['Cells'], $this->technology_cells);
         return new NUR2G([
+            "Action_OGS_responsible"=>$row["Action OGS responsible"],
             "impacted_sites" => $row["Site name"],
             "BSC" => strtolower( $row["BSC"]),
             "cells" => $row["Cells"],

@@ -41,8 +41,8 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
     {
         return [
          
-            "*.Problem source site code" => ['string'],
-            "*.Site Name (Node B)" => ['string'],
+            "*.Problem source site code" => ['required','string'],
+            "*.Site Name (Node B)" => ['required','string'],
             "*.Problem source site name"=>['string'],
             "*.No of cells"=>["required","regex:/^([1-9][0-9]{0,2}|1000)$/"],
             '*.System'=>['string'],
@@ -56,6 +56,7 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
              "*.Incident End Time" => ["required","date"],
             "*.Operation Zone" => ["required",'string'],
             "*.Generator Owner"=>["nullable","regex:/^Shared|Orange|Rented$/"],
+            "*.Action OGS responsible"=>["nullable","string"]
           
 
         ];
@@ -74,12 +75,13 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
         }
         $duration_min = Durations::DurationMin($row['Incident Start Time'], $row['Incident End Time']);
         $duration_hr = Durations::DurationHr($duration_min);
-        $weekly_nur = WeeklyNUR::calculate_NUR($duration_min, $row['Cells'], $this->technology_cells);
+        $weekly_nur = WeeklyNUR::calculate_NUR($duration_min, $row['No of cells'], $this->technology_cells);
         $combinedNUR=WeeklyNUR::calculateCombinedNUR ($weekly_nur,$this->technology_cells,$this->total_net_cells);
         $month_as_number = Durations::getMonth($row['Incident Start Time']);
         $days_of_month = Durations::calculate_month_days($month_as_number);
         $monthly_nur = new MonthlyNUR($days_of_month, $duration_min, $row['No of cells'], $this->technology_cells);
         return new NUR4G([
+            "Action_OGS_responsible"=>$row["Action OGS responsible"],
             "impacted_sites"=>$row["Site Name (Node B)"],
             "cells"=>$row["No of cells"],
             "oz"=>strtolower($row["Operation Zone"]) ,
@@ -105,6 +107,7 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
             'month'=> $month_as_number,
             "network_cells_4G"=>$this->technology_cells,
             'monthly_nur'=>$monthly_nur->calculate_monthly_nur(),
+
             
 
         ]);
