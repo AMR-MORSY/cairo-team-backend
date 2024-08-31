@@ -31,12 +31,6 @@ class NUR4GImport implements ToModel,WithHeadingRow, WithValidation
         $this->total_net_cells=$total_net_cells;
     }
 
-    private function calculateWeeklyCombinedNUR($NUR)
-    {
-        return ($NUR*$this->technology_cells)/$this->total_net_cells;
-
-    }
- 
     public function rules(): array
     {
         return [

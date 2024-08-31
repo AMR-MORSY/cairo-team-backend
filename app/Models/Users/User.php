@@ -16,7 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles,HasPermissions;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +28,8 @@ class User extends Authenticatable
         'email',
         'password',
         "remember_token",
-        "email_verified_at"
+        "email_verified_at",
+        "rem_token_created_at"
 
     ];
 
@@ -40,6 +41,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        "created_at",
+        "updated_at",
+        "email_verified_at",
+        "rem_token_created_at"
+
     ];
 
     /**
@@ -53,18 +59,16 @@ class User extends Authenticatable
 
     public function session()
     {
-        return $this->hasOne(UserSession::class,"user_id");
+        return $this->hasOne(UserSession::class, "user_id");
     }
 
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: function($value){
-                $user=explode(" ",$value);
+            get: function ($value) {
+                $user = explode(" ", $value);
                 return $user[0];
             }
         );
     }
-
-   
 }

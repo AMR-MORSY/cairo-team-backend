@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\SignupVerificationMail;
+use App\Services\NUR\Durations;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -33,13 +34,14 @@ class RegisterController extends Controller
                 "name" => $validated["name"],
                 "email" => $validated['email'],
                 "password" => Hash::make($validated['password']),
-                "remember_token" => Str::random(32)
+                "remember_token" => Str::random(32),
+                "rem_token_created_at"=>Carbon::now()
 
             ]);
             Mail::to($user)->send(new SignupVerificationMail($user->remember_token, $user->name));
 
             return response()->json([
-               
+
                 "message" => "Please check your e-mail and verifiy your accounnt"
 
             ], 200);
@@ -48,10 +50,18 @@ class RegisterController extends Controller
     public function validateSignUpCode($code)
     {
         $user = User::where("remember_token", $code)->first();
+        $minutes_diff = Durations::DurationMin($user->rem_token_created_at, Carbon::now()); /////calculate the difference in minutes between signup code creation time and the time of activation request 
 
+      
         if ($user) {
+            if ($minutes_diff > 10) {//////////sign up code is valid for 10 minutes
+                $user->rem_token_created_at = null;
+                $user->save();
+                return response()->json(["message" => "invalid Activation Code"], 422);
+    
+            }
             $user->email_verified_at = Carbon::now();
-            $user->remember_token=null;
+            $user->remember_token = null;
             $user->save();
 
             return response()->json(["message" => "User Account verified Successfully"], 200);
@@ -69,19 +79,20 @@ class RegisterController extends Controller
                 "errors" => $validator->getMessageBag(),
 
             ], 422);
-        }
-        else{
-            $validated=$validator->validated();
-            $user=User::where("email",$validated["email"])->first();
+        } else {
+            $validated = $validator->validated();
+            $user = User::where("email", $validated["email"])->first();
+            $user->remember_token = Str::random(32);
+            $user->rem_token_created_at=Carbon::now();
+            $user->save();
             Mail::to($user)->send(new SignupVerificationMail($user->remember_token, $user->name));
 
 
             return response()->json([
-               
+
                 "message" => "Please check your e-mail and verifiy your accounnt"
 
             ], 200);
-
         }
     }
 }

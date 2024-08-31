@@ -11,7 +11,7 @@
 
     <p>Please click the link to verify your account</p>
 
-    <a href="http://localhost:5174/user/signUp/{{$verification_code}}" style="text-decoration: solid">Please click here</a>
+    <a href='{{Config::get("app.frontend_url")}}/user/signUp/{{$verification_code}}' style="text-decoration: solid">Please click here</a>
     <p>Thank you.</p>
     <p>Cairo Team</p>
 </body>
