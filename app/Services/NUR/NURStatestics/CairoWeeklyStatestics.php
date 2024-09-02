@@ -164,12 +164,13 @@ class CairoWeeklyStatestics
     {
 
         $statestics = [];
-        $allRANNodeBTickets = $allTickets->where("system", "ran")->values();
-        $allBSSNodeBTickets = $allTickets->where("system", "bss")->values();
-        foreach ($allBSSNodeBTickets as $ticket) {////////////////////collecting RAN and BSS in one collection
-            $allRANNodeBTickets->push($ticket);
-        }
-        $allNodeBTickets = $allRANNodeBTickets;
+        // $allRANNodeBTickets = $allTickets->where("system", "ran")->values();
+        // $allBSSNodeBTickets = $allTickets->where("system", "bss")->values();
+        // foreach ($allBSSNodeBTickets as $ticket) {////////////////////collecting RAN and BSS in one collection
+        //     $allRANNodeBTickets->push($ticket);
+        // }
+        // $allNodeBTickets = $allRANNodeBTickets;
+        $allNodeBTickets=CairoNURHelpers::collectingNodeBTickest($allTickets);
         $NUR_c =  $allNodeBTickets->sum('nur_c');
         $NUR_combined = number_format($NUR_c, 2, '.', ',');
 
