@@ -77,12 +77,12 @@ class CairoYearlyStatestics
         $NUR_week_c = [];
         foreach ($allTickets_week as $week => $tickets) {
 
-            $statestics["NUR_combined"] = $tickets->sum('nur_c');
-            $statestics["NUR_Org_combined"] = $tickets->where('gen_owner', 'orange')->sum('nur_c');
-            $statestics["NUR_Rented_combined"] = $tickets->where('gen_owner', 'rented')->sum('nur_c');
-            $statestics["NUR_ET_combined"] = $tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(Etisalat)")->sum('nur_c');;
-            $statestics["NUR_VF_combined"] = $tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(VF)")->sum('nur_c');
-            $statestics["NUR_WE_combined"] = $tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(WE)")->sum('nur_c');
+            $statestics["NUR_combined"] = number_format($tickets->sum('nur_c'), 2, '.', ',');
+            $statestics["NUR_Org_combined"] = number_format($tickets->where('gen_owner', 'orange')->sum('nur_c'), 2, '.', ',');
+            $statestics["NUR_Rented_combined"] =number_format( $tickets->where('gen_owner', 'rented')->sum('nur_c'), 2, '.', ',');
+            $statestics["NUR_ET_combined"] =number_format($tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(Etisalat)")->sum('nur_c'), 2, '.', ',');
+            $statestics["NUR_VF_combined"] =number_format( $tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(VF)")->sum('nur_c'), 2, '.', ',');
+            $statestics["NUR_WE_combined"] =number_format($tickets->where("gen_owner", "shared")->where("Action_OGS_responsible", "ND(WE)")->sum('nur_c'), 2, '.', ',');
 
             $NUR_week_c["week $week"] = $statestics;
         }

@@ -39,7 +39,7 @@ class ZoneNURHelpers
                 $zoneSubSysTickets = $allTickets->whereStrict("oz", $zone)->whereStrict('sub_system', $system)->values();
                 if(count($zoneSubSysTickets)>0)
                 {
-                    $NUR_c=$zoneSubSysTickets->sum('nur_c');
+                    $NUR_c=number_format($zoneSubSysTickets->sum('nur_c'), 2, '.', ',');
                     $subs[$system] = number_format($NUR_c, 2, '.', ',');
                 }
               

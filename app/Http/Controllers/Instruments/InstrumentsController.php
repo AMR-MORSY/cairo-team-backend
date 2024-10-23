@@ -20,9 +20,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -69,9 +67,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);
@@ -108,9 +104,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -161,9 +155,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);
@@ -192,7 +184,7 @@ class InstrumentsController extends Controller
     {
         $this->authorize("store",Instrument::class);
         $validator = Validator::make($request->all(), [
-            "site_code" => ['required', "exists:instruments,id"],
+            "site_code" => ['required', "exists:sites,site_code"],
             "rec_brand" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
             "module_capacity" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
             "no_module" =>  ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
@@ -203,9 +195,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             Instrument::create($validated);
@@ -225,9 +215,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -291,9 +279,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);
@@ -353,9 +339,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             Instrument::create($validated);
@@ -376,9 +360,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -418,7 +400,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response($validator->errors(), 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);
@@ -453,9 +435,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -504,9 +484,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);
@@ -539,9 +517,7 @@ class InstrumentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $site = Site::where('site_code', $validated['site_code'])->first();
@@ -588,9 +564,7 @@ class InstrumentsController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json([
-                $validator->getMessageBag(),
-            ], 422);
+            return response( $validator->getMessageBag(),422);
         } else {
             $validated = $validator->validated();
             $instrument = Instrument::find($validated["id"]);

@@ -138,10 +138,14 @@ Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(f
     Route::get('/cascades',[CascadesController::class,"exportAllCascades"])->name("all_cascades");
     Route::post('/cascades',[CascadesController::class,"importCascades"])->name("import_cascades");
     Route::post('/nodals',[NodalsController::class,"importNodals"])->name("import_nodals");
-    Route::post('/nodals/download',[NodalsController::class,"exportNodals"]);
+   
     Route::post('/updateCascades',[CascadesController::class,"updateCascades"])->name("updateCascades");
     Route::post('/update',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
     
+});
+Route::prefix('sites')->middleware((['auth:sanctum',"permission:download_nodals"]))->group(function(){
+    Route::post('/nodals/download',[NodalsController::class,"exportNodals"]);
+
 });
 Route::prefix('sites')->middleware(['auth:sanctum',])->group(function(){
     Route::get('/search/{search}',[NormalUsersSitesController::class,"search"])->name("search_sites");
@@ -157,12 +161,15 @@ Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
    
 
 });
-Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
-    Route::post('/siteNUR',[ShowNURController::class,"SiteNUR"])->name("siteNUR");
-    Route::get('/show/{week}/{year}',[ShowNURController::class,"show_nur"])->name("show_nur");
+Route::prefix('Nur')->middleware(['auth:sanctum','permission:downloadNUR'])->group(function(){
     Route::post('/downloadNUR2G',[DownloadNURController::class,"NUR2G"])->name("site2GNUR");
     Route::post('/downloadNUR3G',[DownloadNURController::class,"NUR3G"])->name("site3GNUR");
     Route::post('/downloadNUR4G',[DownloadNURController::class,"NUR4G"])->name("site4GNUR");
+});
+Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
+    Route::post('/siteNUR',[ShowNURController::class,"SiteNUR"])->name("siteNUR");
+    Route::get('/show/{week}/{year}',[ShowNURController::class,"show_nur"])->name("show_nur");
+  
     Route::get('/vip/week/{zone}/{week}/{year}',[ShowNURController::class,"vipSitesWeeklyNUR"]);
     Route::get('/nodal/week/{zone}/{week}/{year}',[ShowNURController::class,"nodalSitesWeeklyNUR"]);
     Route::get('/cairo/weekly/MWNUR/{week}/{year}',[ShowNURController::class,"cairoMWweeklyNUR"]);

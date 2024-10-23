@@ -31,13 +31,26 @@ class ResetPasswordController extends Controller
             $user = User::where('email', $validated['email'])->first();
 
             if ($user) {
-                $token = Str::random(32);
-                $url = $request->host();
-                Mail::to($user)->send(new ResetPasswordMailable($token, $url));
-                $password_reset = new PasswordReset();
-                $password_reset->email = $user->email;
-                $password_reset->token = $token;
-                $password_reset->save();
+                if ($user->email_verified_at != null) {
+                    $token = Str::random(32);
+                    $url = $request->host();
+                    Mail::to($user)->send(new ResetPasswordMailable($token, $url));
+                    $password_reset = new PasswordReset();
+                    $password_reset->email = $user->email;
+                    $password_reset->token = $token;
+                    $password_reset->save();
+                    return response()->json([
+                        "message"=>"success"
+
+                    ],200);
+
+                }
+                $emailError["email"] = "Account is not verified yet";
+
+                return response()->json([
+                    "errors" => $emailError,
+
+                ],422);
             } else {
 
                 $emailError["email"] = "Email does not exist";

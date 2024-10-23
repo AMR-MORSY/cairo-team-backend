@@ -54,7 +54,7 @@ class RegisterController extends Controller
 
       
         if ($user) {
-            if ($minutes_diff > 10) {//////////sign up code is valid for 10 minutes
+            if ($minutes_diff > 20) {//////////sign up code is valid for 10 minutes
                 $user->rem_token_created_at = null;
                 $user->save();
                 return response()->json(["message" => "invalid Activation Code"], 422);

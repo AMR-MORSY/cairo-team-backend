@@ -66,7 +66,7 @@ class CairoNURHelpers
         foreach ($allTickets_weeks as $week => $tickets) {
 
 
-            $NUR_C["week $week"] = $tickets->sum('nur_c');
+            $NUR_C["week $week"] =  number_format($tickets->sum('nur_c'), 2, '.', ',');
         }
 
         return $NUR_C;
@@ -82,7 +82,7 @@ class CairoNURHelpers
             $NUR_week_c = [];
             foreach ($allTickets_week as $week => $tickets) {
 
-                $NUR_week_c["week $week"] = $tickets->sum('nur_c');
+                $NUR_week_c["week $week"] = number_format($tickets->sum('nur_c'), 2, '.', ',');
             }
 
 

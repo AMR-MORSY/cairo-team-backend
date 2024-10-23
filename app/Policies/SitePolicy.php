@@ -29,7 +29,7 @@ class SitePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create_Site_data');
+        return $user->hasPermissionTo('insert_New_site');
     }
 
     /**

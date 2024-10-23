@@ -66,20 +66,17 @@ class ShowNURController extends Controller
     public function cairoYearlyNUR_C($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-      
+
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_C_yearly = CairoYearlyStatestics::cairoNUR_C($allTickets, $year);
         return response()->json([
             "NUR_C_yearly" => $NUR_C_yearly
         ], 200);
-
-
-       
     }
     public function cairoModificationYearlyNUR($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-       
+
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_Gen_yearly = CairoYearlyStatestics::cairoModificationNUR($allTickets, $year);
         return response()->json([
@@ -89,7 +86,7 @@ class ShowNURController extends Controller
     public function cairoPowerYearlyNUR($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-        
+
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_Power_yearly = CairoYearlyStatestics::cairoPowerNUR($allTickets, $year);
         return response()->json([
@@ -100,7 +97,7 @@ class ShowNURController extends Controller
     public function cairoNodeBYearlyNUR($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-       
+
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_NodeB_yearly = CairoYearlyStatestics::cairoNodeBNUR($allTickets, $year);
@@ -111,7 +108,7 @@ class ShowNURController extends Controller
     public function cairoMWYearlyNUR($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-       
+
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_TX_yearly = CairoYearlyStatestics::cairoTXNUR($allTickets, $year);
         return response()->json([
@@ -121,7 +118,7 @@ class ShowNURController extends Controller
     public function cairoGenYearlyNUR($year)
     {
         $this->authorize("viewAny", NUR2G::class);
-       
+
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
         $NUR_Gen_yearly = CairoYearlyStatestics::cairoGenNUR($allTickets, $year);
         return response()->json([
@@ -129,20 +126,25 @@ class ShowNURController extends Controller
         ], 200);
     }
 
-    private function collectAllWeekTickets($total_week_tickets_2G, $total_week_tickets_3G, $total_week_tickets_4G): Collection ///returns a collection of all technology tickets
+    private function collectAllWeekTickets($total_week_tickets_2G, $total_week_tickets_3G, $total_week_tickets_4G) ///returns a collection of all technology tickets
     {
 
 
+        $allTickets=[];
+       
+        foreach ($total_week_tickets_2G as $ticket) {
+          array_push($allTickets,$ticket) ;
+        }
         foreach ($total_week_tickets_3G as $ticket) {
-            $total_week_tickets_2G->push($ticket);
+            array_push($allTickets,$ticket) ;
         }
-        $allTickets = $total_week_tickets_2G;
-
+     
         foreach ($total_week_tickets_4G as $ticket) {
-            $allTickets->push($ticket);
+            array_push($allTickets,$ticket) ;
         }
 
-        return $allTickets;
+        $allTickets=collect($allTickets);
+        return  $allTickets;
     }
 
     private function getWeekTechTickets($week, $year): array /////this function returns total week tickets for each technology
@@ -238,6 +240,7 @@ class ShowNURController extends Controller
             $vip_sites_names = $vip_sites->groupBy("site_name")->keys();
 
             $sites = $this->getVipORNodalNUR($vip_sites_codes, $vip_sites_names, $week, $validated['year']);
+            
 
 
 
@@ -279,31 +282,43 @@ class ShowNURController extends Controller
 
         for ($i = 0; $i < $count_vip_codes; $i++) {
             $vip = [];
-            $NUR2G = NUR2G::where("problem_site_code", $vip_nodal_codes[$i])->where("week", $week)->where("year", $year)->get();
+            $allTickets=[];
             $NUR3G = NUR3G::where("problem_site_code", $vip_nodal_codes[$i])->where("week", $week)->where("year", $year)->get();
+            $NUR2G = NUR2G::where("problem_site_code", $vip_nodal_codes[$i])->where("week", $week)->where("year", $year)->get();
+           
             $NUR4G = NUR4G::where("problem_site_code", $vip_nodal_codes[$i])->where("week", $week)->where("year", $year)->get();
-
-            if (count($NUR2G) > 0) {
-                $vip["site_name"] = $vip_nodal_names[$i];
-                $vip["site_code"] = $vip_nodal_codes[$i];
-                $vip["NUR_2G_count_tickets"] = $NUR2G->count();
-                $vip["NUR_2G_sum_nur"] = number_format($NUR2G->sum("nur"), 2, '.', ',');
-                $vip["NUR_2G_tickets"] = $NUR2G;
-            }
+           
             if (count($NUR3G) > 0) {
                 $vip["site_name"] = $vip_nodal_names[$i];
                 $vip["site_code"] = $vip_nodal_codes[$i];
-                $vip["NUR_3G_count_tickets"] = $NUR3G->count();
-                $vip["NUR_3G_sum_nur"] = number_format($NUR3G->sum("nur"), 2, '.', ',');
+                // $vip["NUR_3G_count_tickets"] = $NUR3G->count();
+                // $vip["NUR_3G_sum_nur"] = number_format($NUR3G->sum("nur"), 2, '.', ',');
                 $vip["NUR_3G_tickets"] = $NUR3G;
             }
+          
+            if (count($NUR2G) > 0) {
+                $vip["site_name"] = $vip_nodal_names[$i];
+                $vip["site_code"] = $vip_nodal_codes[$i];
+                //  $vip["NUR_2G_count_tickets"] = $NUR2G->count();
+                // $vip["NUR_2G_sum_nur"] = number_format($NUR2G->sum("nur"), 2, '.', ',');
+                $vip["NUR_2G_tickets"] = $NUR2G;
+            }
+           
             if (count($NUR4G) > 0) {
                 $vip["site_name"] = $vip_nodal_names[$i];
                 $vip["site_code"] = $vip_nodal_codes[$i];
-                $vip["NUR_4G_count_tickets"] = $NUR4G->count();
-                $vip["NUR_4G_sum_nur"] = number_format($NUR4G->sum("nur"), 2, '.', ',');
+                // $vip["NUR_4G_count_tickets"] = $NUR4G->count();
+                // $vip["NUR_4G_sum_nur"] = number_format($NUR4G->sum("nur"), 2, '.', ',');
                 $vip["NUR_4G_tickets"] = $NUR4G;
             }
+             $allTickets = $this->collectAllWeekTickets($NUR2G,$NUR3G,$NUR4G);
+            if(count($allTickets)>0)
+            {
+                $NUR_c=number_format($allTickets->sum("nur_c"), 2, '.', ',');
+                $vip['NUR_c']=$NUR_c;
+
+            }
+           
             if (count($vip) > 0) {
                 array_push($sites, $vip);
             }

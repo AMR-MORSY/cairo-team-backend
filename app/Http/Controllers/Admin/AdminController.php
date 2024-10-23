@@ -22,9 +22,19 @@ class AdminController extends Controller
 
         $user = User::find(Auth::user()->id);
         if ($user) {
+             $perissions=[];
+            if($user->hasRole('super-admin'))
+            {
+                 $perissions=Permission::all()->pluck('name');
+
+            }
+            else{
+                $perissions=$user->getAllPermissions()->pluck("name");
+
+            }
 
             return response()->json([
-                "permissions" => $user->getAllPermissions()->pluck("name")
+                "permissions" => $perissions
 
 
             ], 200);
