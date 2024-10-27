@@ -8,17 +8,14 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('2g-nurs', function (Blueprint $table) {
+        Schema::create('fm4gnurs', function (Blueprint $table) {
             $table->id();
             $table->enum("work_group",["ALGAM","HLGAM","NLGAM"]);
             $table->string('Action_OGS_responsible')->nullable();
             $table->text('impacted_sites');
-            $table->string('BSC')->nullable();
             $table->integer('cells');
             $table->dateTime("begin");
             $table->dateTime("end");
@@ -31,18 +28,18 @@ return new class extends Migration
             $table->boolean("access")->default(0)->nullable();
             $table->boolean('Force_Majeure')->nullable()->default(0);
             $table->string('Force_Majeure_type')->nullable();
-            $table->enum("technology", ['2G'])->default("2G");
+            $table->enum("technology", ['4G'])->default("4G");
             $table->string('Dur_Hr');
             $table->integer('Dur_min');
             $table->integer("week");
+            $table->string("gen_owner")->nullable();
             $table->integer("year");
             $table->decimal("nur_c", $precision = 8, $scale = 2);
-            $table->integer('network_cells_2G');
-            $table->integer('total_network_cells');
-            $table->string("gen_owner")->nullable();
             $table->string('problem_site_code', 100)->nullable();
             $table->string('problem_site_name', 300)->nullable();
             $table->integer('month');
+            $table->integer('network_cells_4G');
+            $table->integer('total_network_cells');
             $table->decimal('monthly_nur', $precision = 8, $scale = 2);
             $table->timestamps();
         });
@@ -50,11 +47,9 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('nurs');
+        Schema::dropIfExists('fm4gnurs');
     }
 };

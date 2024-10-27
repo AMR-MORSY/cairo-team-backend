@@ -6,6 +6,7 @@ use App\Models\NUR\NUR2G;
 use Illuminate\Http\Request;
 use App\Imports\NUR\NUR2GImport;
 use App\Http\Controllers\Controller;
+use App\Imports\NUR\NUR2G\Import2G;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,7 +31,7 @@ class NUR2GController extends Controller
                 ], 422);
             }
 
-            $import = new NUR2GImport($validated['week'], $validated['year'],$validated['cells'],$validated['total_net_cells']);
+            $import = new Import2G($validated['week'], $validated['year'],$validated['cells'],$validated['total_net_cells']);
             try {
                
                 Excel::import($import, $request->file("Nur2G_sheet"));

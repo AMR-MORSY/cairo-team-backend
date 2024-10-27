@@ -8,12 +8,10 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('2g-nurs', function (Blueprint $table) {
+        Schema::create('fm2gnurs', function (Blueprint $table) {
             $table->id();
             $table->enum("work_group",["ALGAM","HLGAM","NLGAM"]);
             $table->string('Action_OGS_responsible')->nullable();
@@ -50,11 +48,9 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('nurs');
+        Schema::dropIfExists('fm2gnurs');
     }
 };

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\NUR;
 use App\Models\NUR\NUR3G;
 use Illuminate\Http\Request;
 use App\Imports\NUR\NUR3GImport;
+use App\Imports\NUR\NUR3G\Import3G;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -30,7 +31,7 @@ class NUR3GController extends Controller
                 ], 422);
             }
 
-            $import = new NUR3GImport($validated['week'], $validated['year'],$validated['cells'],$validated['total_net_cells']);
+            $import = new Import3G($validated['week'], $validated['year'],$validated['cells'],$validated['total_net_cells']);
             try {
                
                 Excel::import($import, $request->file("Nur3G_sheet"));
