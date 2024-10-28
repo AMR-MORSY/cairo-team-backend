@@ -2,7 +2,7 @@
 
 namespace App\Services\NUR\NURStatestics;
 
-
+use App\Models\NUR\NUR3G;
 
 class CairoWeeklyStatestics
 {
@@ -192,5 +192,68 @@ class CairoWeeklyStatestics
 
 
         return $data;
+    }
+
+    public static function cairoSubsystem($allTickets)
+    {
+        $subs=[];
+        $subsystems = $allTickets->groupBy("sub_system")->keys();
+        foreach ($subsystems as $system) {
+            $subSysTickets = $allTickets->whereStrict('sub_system', $system)->values();
+            if(count($subSysTickets)>0)
+            {
+                $statestics=[];
+                $NUR_c=number_format($subSysTickets->sum('nur_c'), 2, '.', ',');
+                $countTick=$subSysTickets->count();
+                $statestics['NUR']=$NUR_c;
+                $statestics['countTick']=$countTick;
+                $subs[$system] = $statestics;
+                
+            }
+          
+        }
+        return $subs;
+    }
+
+    public static function cairoTopRepeated($allTickets)
+    {
+        $siteCodes = $allTickets->where('technology',"3G")->groupBy("problem_site_code");
+        $statestics=[];
+        foreach($siteCodes as $code=>$codeTickets)
+        {
+           
+            $siteName=$codeTickets->first()->problem_site_name;
+            $site["site_code"]=$code; ///////////site object
+            $site['site_name']=$siteName;
+            $site['count']=$codeTickets->count();
+            $site['week']=$codeTickets->first()->week;
+            $site['year']=$codeTickets->first()->year;
+          
+            array_push($statestics,$site);
+
+           
+        }
+        $statestics=collect($statestics);
+        $statestics=$statestics->sortByDesc("count");
+        $statestics=$statestics->take(20);
+
+        $sites=[];
+
+        foreach($statestics as $site)
+        {
+            $pastWeekTickets=NUR3G::where('problem_site_code',$site['site_code'])->where('week',$site["week"]-1)->where('year',$site["year"])->get();
+            $pastweekTicketsCount=0;
+            if(count($pastWeekTickets)>0)
+            {
+                $pastweekTicketsCount=count($pastWeekTickets);
+            }
+            $sub["week".$site['week']-1]=$pastweekTicketsCount;
+            $sub["week".$site['week']]=$site["count"];
+            $sites[$site['site_code']."-".$site['site_name']]=$sub;
+
+        }
+        return $sites;
+
+
     }
 }

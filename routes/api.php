@@ -168,7 +168,7 @@ Route::prefix('Nur')->middleware(['auth:sanctum','permission:downloadNUR'])->gro
 });
 Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
     Route::post('/siteNUR',[ShowNURController::class,"SiteNUR"])->name("siteNUR");
-    Route::get('/show/{week}/{year}',[ShowNURController::class,"show_nur"])->name("show_nur");
+    Route::get('/show/{week}/{year}/{NUR_Type}',[ShowNURController::class,"show_nur"])->name("show_nur");
   
     Route::get('/vip/week/{zone}/{week}/{year}',[ShowNURController::class,"vipSitesWeeklyNUR"]);
     Route::get('/nodal/week/{zone}/{week}/{year}',[ShowNURController::class,"nodalSitesWeeklyNUR"]);
