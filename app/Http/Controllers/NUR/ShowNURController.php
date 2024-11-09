@@ -18,8 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Services\NUR\NURStatestics\ZoneWeeklyStatestics;
 use App\Services\NUR\NURStatestics\CairoWeeklyStatestics;
 use App\Services\NUR\NURStatestics\CairoYearlyStatestics;
-
-
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class ShowNURController extends Controller
 {
@@ -91,7 +90,7 @@ class ShowNURController extends Controller
         return  $allTickets;
     }
 
-    private function getWeekTechTickets($week, $year, $NUR_Type): array /////this function returns total week tickets for each technology
+    private function getCairoWeekTechTickets($week, $year, $NUR_Type): array /////this function returns total week tickets for each technology
     {
         if($NUR_Type=="NUR")////// the required ticket either for FM or network NUR 
         {
@@ -119,10 +118,40 @@ class ShowNURController extends Controller
 
         return $total_week;
     }
+
+    private function getAllWeekFMTickets($week, $year)
+    {
+        $total_week_tickets_2G = FM2G::where('year', $year)->where('week', $week)->get(); /////collection
+
+        $total_week_tickets_3G = FM3G::where('year', $year)->where('week', $week)->get();
+
+        $total_week_tickets_4G = FM4G::where('year', $year)->where('week', $week)->get();
+        $total_week['tickets_2G'] = $total_week_tickets_2G;
+        $total_week['tickets_3G'] = $total_week_tickets_3G;
+        $total_week['tickets_4G'] = $total_week_tickets_4G;
+
+        return $total_week;
+
+
+    }
+    private function getAllWeekNURTickets($week,$year)
+    {
+        $total_week_tickets_2G = NUR2G::where('year', $year)->where('week', $week)->get(); /////collection
+
+        $total_week_tickets_3G = NUR3G::where('year', $year)->where('week', $week)->get();
+
+        $total_week_tickets_4G = NUR4G::where('year', $year)->where('week', $week)->get();
+        $total_week['tickets_2G'] = $total_week_tickets_2G;
+        $total_week['tickets_3G'] = $total_week_tickets_3G;
+        $total_week['tickets_4G'] = $total_week_tickets_4G;
+
+        return $total_week;
+
+    }
     private function getWeeklyNUR($week, $year, $NUR_Type)
     {
 
-        $total_week = $this->getWeekTechTickets($week, $year, $NUR_Type);
+        $total_week = $this->getCairoWeekTechTickets($week, $year, $NUR_Type);
 
         $errors = [];
         if (count($total_week['tickets_2G']) <= 0) {
@@ -144,17 +173,31 @@ class ShowNURController extends Controller
             $NUR['NUR2G'] = ZoneWeeklyStatestics::NUR2GStatestics($total_week['tickets_2G']);
             $NUR['NUR3G'] = ZoneWeeklyStatestics::NUR3GStatestics($total_week['tickets_3G']);
             $NUR['NUR4G'] = ZoneWeeklyStatestics::NUR4GStatestics($total_week['tickets_4G']);
-            $NUR["zonesSubsystem"] = ZoneWeeklyStatestics::zonesSubsystemNUR($allTickets);
-            $NUR["cairoSubsystem"]=CairoWeeklyStatestics::cairoSubsystem($allTickets);
-            $NUR["zonesSubsystemCountTickts"] = ZoneWeeklyStatestics::zonesSubsystemCountTickts($allTickets);
-            // $NUR["zonesResponseWithAccess"] = ZoneWeeklyStatestics::zonesResponseWithAccess($allTickets);
-            // $NUR["zonesResponseWithoutAccess"] = ZoneWeeklyStatestics::zonesResponseWithoutAccess($allTickets);
-            $NUR["zonesGeneratorStatestics"] = ZoneWeeklyStatestics::zonesGeneratorStatestics($allTickets);
-            $NUR["topRepeated"] = ZoneWeeklyStatestics::zonesTopRepeated($allTickets);
-            $NUR["cairoTopRepeated"]=CairoWeeklyStatestics::cairoTopRepeated($allTickets);
-            $NUR["topNUR"] = ZoneWeeklyStatestics::zonesTopNUR($allTickets);
             $NUR['combined'] = ZoneWeeklyStatestics::combinedNUR($allTickets);
+            if($NUR_Type =="NUR")
+            {
+                $NUR["zonesSubsystem"] = ZoneWeeklyStatestics::zonesSubsystemNUR($allTickets);
+                $NUR["cairoSubsystem"]=CairoWeeklyStatestics::cairoSubsystem($allTickets);
+                $NUR["zonesSubsystemCountTickts"] = ZoneWeeklyStatestics::zonesSubsystemCountTickts($allTickets);
+                // $NUR["zonesResponseWithAccess"] = ZoneWeeklyStatestics::zonesResponseWithAccess($allTickets);
+                // $NUR["zonesResponseWithoutAccess"] = ZoneWeeklyStatestics::zonesResponseWithoutAccess($allTickets);
+                $NUR["zonesGeneratorStatestics"] = ZoneWeeklyStatestics::zonesGeneratorStatestics($allTickets);
+                $NUR["topRepeated"] = ZoneWeeklyStatestics::zonesTopRepeated($allTickets);
+                $NUR["cairoTopRepeated"]=CairoWeeklyStatestics::cairoTopRepeated($allTickets);
+                $NUR["topNUR"] = ZoneWeeklyStatestics::zonesTopNUR($allTickets);
+               
 
+            }
+            else{
+                $total_week_NUR=$this->getAllWeekNURTickets($week,$year);
+                $total_week_FM=$this->getAllWeekFMTickets($week,$year);
+                $allWeekNURTickets = $this->collectAllWeekTickets($total_week_NUR['tickets_2G'], $total_week_NUR['tickets_3G'], $total_week_NUR['tickets_4G']);
+               
+                $allWeekFMTickets=$this->collectAllWeekTickets($total_week_FM['tickets_2G'], $total_week_FM['tickets_3G'], $total_week_FM['tickets_4G']);
+                $NUR['workGroupCompar']=CairoWeeklyStatestics::workGroupFMComparison($allWeekFMTickets);
+            }
+
+         
             return $NUR;
         }
     }
@@ -295,7 +338,11 @@ class ShowNURController extends Controller
         $this->authorize("viewAny", NUR2G::class);
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_C_yearly = CairoYearlyStatestics::cairoNUR_C($allTickets, $year);
+     
+         $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+      
+        
+         $NUR_C_yearly = CairoYearlyStatestics::cairoNUR_C(  $cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" => $NUR_C_yearly
         ], 200);
@@ -305,7 +352,8 @@ class ShowNURController extends Controller
         $this->authorize("viewAny", NUR2G::class);
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_Gen_yearly = CairoYearlyStatestics::cairoModificationNUR($allTickets, $year);
+        $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+        $NUR_Gen_yearly = CairoYearlyStatestics::cairoModificationNUR($cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" => $NUR_Gen_yearly
         ], 200);
@@ -315,7 +363,8 @@ class ShowNURController extends Controller
         $this->authorize("viewAny", NUR2G::class);
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_Power_yearly = CairoYearlyStatestics::cairoPowerNUR($allTickets, $year);
+        $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+        $NUR_Power_yearly = CairoYearlyStatestics::cairoPowerNUR($cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" => $NUR_Power_yearly
         ], 200);
@@ -327,7 +376,8 @@ class ShowNURController extends Controller
 
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_NodeB_yearly = CairoYearlyStatestics::cairoNodeBNUR($allTickets, $year);
+        $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+        $NUR_NodeB_yearly = CairoYearlyStatestics::cairoNodeBNUR($cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" => $NUR_NodeB_yearly
         ], 200);
@@ -337,7 +387,8 @@ class ShowNURController extends Controller
         $this->authorize("viewAny", NUR2G::class);
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_TX_yearly = CairoYearlyStatestics::cairoTXNUR($allTickets, $year);
+        $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+        $NUR_TX_yearly = CairoYearlyStatestics::cairoTXNUR($cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" =>  $NUR_TX_yearly
         ], 200);
@@ -347,7 +398,8 @@ class ShowNURController extends Controller
         $this->authorize("viewAny", NUR2G::class);
 
         $allTickets = CairoYearlyStatestics::allYearTickets($year);
-        $NUR_Gen_yearly = CairoYearlyStatestics::cairoGenNUR($allTickets, $year);
+        $cairoAllTickets=$allTickets->where("work_group","HLGAM");
+        $NUR_Gen_yearly = CairoYearlyStatestics::cairoGenNUR($cairoAllTickets, $year);
         return response()->json([
             "NUR_C_yearly" =>  $NUR_Gen_yearly
         ], 200);

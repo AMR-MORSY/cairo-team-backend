@@ -52,7 +52,7 @@ Route::prefix('admin')->group(function(){
     Route::post('/signUp',[AdminController::class,"adminLogin"]);
   
 });
-Route::prefix('activities')->middleware(['auth:sanctum'])->group(function(){
+Route::prefix('activities')->middleware(['auth:sanctum',"role:super-admin"])->group(function(){
     Route::get('/modifications',[ActivitiesController::class,"modificationsActivities"]);
     Route::get('/modifications/{id}',[ActivitiesController::class,"modificationActivityData"]);
     Route::get('/wans',[ActivitiesController::class,"wanActivities"]);
@@ -61,7 +61,7 @@ Route::prefix('activities')->middleware(['auth:sanctum'])->group(function(){
     Route::get('/transmissions/{id}',[ActivitiesController::class,"transmissionActivityData"]);
 });
 
-Route::prefix('admin')->middleware(['auth:sanctum'])->group(function(){
+Route::prefix('admin')->middleware(['auth:sanctum','role:admin|super-admin'])->group(function(){
     Route::post('/logout',[AdminController::class,"logout"]);
     Route::get('/abilities',[AdminController::class,"userAbilities"]);
     Route::get('/users',[AdminController::class,"users"]);
@@ -98,6 +98,29 @@ Route::prefix("energysheet")->middleware(['auth:sanctum',"role:admin|super-admin
     Route::post('/index',[EnergyController::class,"store_alarms"] )->name("energysheet_store_alarms");
 
 });
+
+Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Admin|Modification_Viewer|admin|super-admin'])->group(function(){
+    Route::get("/analysis",[ModificationsController::class,"analysis"])->name("analysis");
+    Route::get("/index/{columnName}/{columnValue}",[ModificationsController::class,"index"])->name("index");
+   
+    Route::get("/siteModifications/{site_code}",[ModificationsController::class,"siteModifications"])->name("siteModifications");
+    Route::get("/details/{id}",[ModificationsController::class,"modificationDetails"])->name("details");
+
+    
+    Route::post("/download",[ModificationsController::class,"download"])->name("download_modification");
+});
+
+
+Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Admin|super-admin|admin'])->group(function(){
+    Route::post("/delete",[ModificationsController::class,"deleteModification"])->name("delete_modification");
+});
+
+Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Admin|admin|super-admin'])->group(function(){
+    Route::post("/update",[ModificationsController::class,"modificationUpdate"])->name("modification_update");
+    Route::post("/new",[ModificationsController::class,"newModification"])->name("new_modification");
+});
+
+
 Route::prefix("energysheet")->middleware(['auth:sanctum'])->group(function(){
 
     Route::post("/alarms",[EnergyStatesticsController::class,"siteAlarms"]);
@@ -118,16 +141,6 @@ Route::prefix("energysheet")->middleware(['auth:sanctum'])->group(function(){
 
 });
 
-Route::prefix('modifications')->middleware(['auth:sanctum'])->group(function(){
-    Route::get("/analysis",[ModificationsController::class,"analysis"])->name("analysis");
-    Route::get("/index/{columnName}/{columnValue}",[ModificationsController::class,"index"])->name("index");
-    Route::post("/update",[ModificationsController::class,"modificationUpdate"])->name("modification_update");
-    Route::get("/siteModifications/{site_code}",[ModificationsController::class,"siteModifications"])->name("siteModifications");
-    Route::get("/details/{id}",[ModificationsController::class,"modificationDetails"])->name("details");
-    Route::post("/new",[ModificationsController::class,"newModification"])->name("new_modification");
-    Route::post("/delete",[ModificationsController::class,"deleteModification"])->name("delete_modification");
-    Route::post("/download",[ModificationsController::class,"download"])->name("download_modification");
-});
 
 
 Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(function(){
@@ -143,7 +156,7 @@ Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(f
     Route::post('/update',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
     
 });
-Route::prefix('sites')->middleware((['auth:sanctum',"permission:download_nodals"]))->group(function(){
+Route::prefix('sites')->middleware((['auth:sanctum',"role:admin|super-admin"]))->group(function(){
     Route::post('/nodals/download',[NodalsController::class,"exportNodals"]);
 
 });
@@ -151,7 +164,7 @@ Route::prefix('sites')->middleware(['auth:sanctum',])->group(function(){
     Route::get('/search/{search}',[NormalUsersSitesController::class,"search"])->name("search_sites");
     Route::get('/details/{siteCode}',[NormalUsersSitesController::class,"siteDetails"])->name("site_details");
 });
-Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
+Route::prefix('Nur')->middleware(['auth:sanctum','role:admin|super-admin|NUR_Viewer'])->group(function(){
     // Route::get('/newsitesinsert',[SitesController::class,"index"])->name("sites");
     Route::get('/index',[NurIndexController::class,"index"])->name("Nur_index");
     Route::post('/2G',[NUR2GController::class,"store"])->name("store_2G");
@@ -161,12 +174,12 @@ Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
    
 
 });
-Route::prefix('Nur')->middleware(['auth:sanctum','permission:downloadNUR'])->group(function(){
+Route::prefix('Nur')->middleware(['auth:sanctum','role:NUR_Viewer|admin|super-admin'])->group(function(){
     Route::post('/downloadNUR2G',[DownloadNURController::class,"NUR2G"])->name("site2GNUR");
     Route::post('/downloadNUR3G',[DownloadNURController::class,"NUR3G"])->name("site3GNUR");
     Route::post('/downloadNUR4G',[DownloadNURController::class,"NUR4G"])->name("site4GNUR");
 });
-Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
+Route::prefix('Nur')->middleware(['auth:sanctum','role:NUR_Viewer|admin|super-admin'])->group(function(){
     Route::post('/siteNUR',[ShowNURController::class,"SiteNUR"])->name("siteNUR");
     Route::get('/show/{week}/{year}/{NUR_Type}',[ShowNURController::class,"show_nur"])->name("show_nur");
   
@@ -187,7 +200,7 @@ Route::prefix('Nur')->middleware(['auth:sanctum'])->group(function(){
 });
 
 
-Route::prefix("instruments")->middleware(['auth:sanctum'])->group(function(){
+Route::prefix("instruments")->middleware(['auth:sanctum','permission:read_Instrument_data'])->group(function(){
     Route::post('/siteBatteriesData',[InstrumentsController::class,"siteBatteriesData"]);
    
     Route::post('/siteRectifierData',[InstrumentsController::class,"siteRectifierData"]);
@@ -214,14 +227,14 @@ Route::prefix('sites')->group(function(){
    
 });
 
-Route::prefix("Transmission")->middleware(["auth:sanctum"])->group(function(){
+Route::prefix("Transmission")->middleware(["auth:sanctum","role:admin|super-admin"])->group(function(){
   
     Route::get("/getSiteTXIssues/{site_code}",[All_TX_ActionsController::class,"getSiteTXIssues"]);
     Route::get("/searchTxIssues/{fromDate}/{toDate}/{issue}",[All_TX_ActionsController::class,"searchTxIssues"]);
   
 
 });
-Route::prefix("Transmission")->middleware(["auth:sanctum","permission:store_TX_data"])->group(function(){
+Route::prefix("Transmission")->middleware(["auth:sanctum","role:admin|super-admin"])->group(function(){
     Route::post("/updateSiteIP_trafics",[IP_traffic_Controller::class,"updateSiteIP_trafics"]);
     Route::post("/updateSiteXPICs",[XPICController::class,"updateSiteXPICs"]);
     Route::post("/updateSiteWAN",[WANController::class,"updateSiteWAN"]);

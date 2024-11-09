@@ -66,6 +66,7 @@ class NUR3GImportService
         return [
             "Action_OGS_responsible"=>$row["action ogs responsible"],
             "impacted_sites"=>$row["site name (node b)"],
+            "work_group"=>$row["to workgroup"],
             "RNC"=>strtolower( $row["rnc"]),
             "cells"=>$row["no of cells"],
             "oz"=>strtolower($row["operation zone"]) ,

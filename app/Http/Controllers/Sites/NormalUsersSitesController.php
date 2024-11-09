@@ -126,10 +126,15 @@ class NormalUsersSitesController extends Controller
 
                             foreach ($nodal->cascades as $cascade) {
                                 $cascade_info=Site::where("site_code", $cascade["cascade_code"])->first();
-                                $cascade_category=$cascade_info->category;
-                                $cascade["category"]=$cascade_category;
-                                array_push($indirectCascades, $cascade);
-                                $indirectCascadesContainer->append($cascade);
+                                if(isset($cascade_info))/////if the cascade code does not exist in sites table
+                                {
+                                    $cascade_category=$cascade_info->category;
+                                    $cascade["category"]=$cascade_category;
+                                    array_push($indirectCascades, $cascade);
+                                    $indirectCascadesContainer->append($cascade);
+
+                                }
+                               
                             }
                         }
 

@@ -153,7 +153,7 @@ class CairoWeeklyStatestics
         $impactedSites = CairoNURHelpers::getImpactedSites($allMWTickets);
 
 
-        $data["statestics"] = $statestics;
+        $data["statestics"] =  $statestics;
         $data['impactedSites'] = $impactedSites;
 
 
@@ -254,6 +254,24 @@ class CairoWeeklyStatestics
         }
         return $sites;
 
+
+    }
+
+    public static function workGroupFMComparison($allWeekFMTickest)
+    {
+        $allWeekFMTickest=collect($allWeekFMTickest);
+        $AGLITicktes=$allWeekFMTickest->where('work_group',"ALGAM");
+        $HGLITicktes=$allWeekFMTickest->where('work_group',"HLGAM");
+        $NGLITicktes=$allWeekFMTickest->where('work_group',"NLGAM");
+        $FM["HGLI"]["ticktes_count"]=$HGLITicktes->count();
+        $FM["HGLI"]["NUR"]=number_format($HGLITicktes->sum('nur_c'), 2, '.', ','); 
+        $FM["NGLI"]["ticktes_count"]=$NGLITicktes->count();
+        $FM["NGLI"]["NUR"]=number_format($NGLITicktes->sum('nur_c'), 2, '.', ','); 
+        $FM["AGLI"]["ticktes_count"]=$AGLITicktes->count();
+        $FM["AGLI"]["NUR"]=number_format($AGLITicktes->sum('nur_c'), 2, '.', ','); 
+        $FM["total"]["ticktes_count"]=$FM["HGLI"]["ticktes_count"]+ $FM["NGLI"]["ticktes_count"]+  $FM["AGLI"]["ticktes_count"];
+        $FM["total"]["NUR"]= $FM["HGLI"]["NUR"]+ $FM["AGLI"]["NUR"]+$FM["NGLI"]["NUR"];
+        return $FM;
 
     }
 }

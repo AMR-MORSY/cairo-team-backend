@@ -29,7 +29,7 @@ class CairoYearlyStatestics
         $cairoNUR_C = CairoNURHelpers::getNUR_C( $TXTickets);
         $zonesNUR_c =  CairoNURHelpers::zonesNUR_C( $TXTickets,$year);
         return [
-            "cairo" => $cairoNUR_C,
+            "cairo" =>  $cairoNUR_C,
             "zones" => $zonesNUR_c
         ];
     }
