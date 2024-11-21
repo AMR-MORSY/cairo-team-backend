@@ -30,4 +30,13 @@ class NUR2G extends Model
             get: fn ($value) => ucwords($value),
         );
     }
+
+    protected function office():Attribute
+    {
+        return Attribute::make(
+            set: fn($value)=> strtolower($value),
+            get: fn ($value)=>ucwords($value)
+
+        );
+    }
 }

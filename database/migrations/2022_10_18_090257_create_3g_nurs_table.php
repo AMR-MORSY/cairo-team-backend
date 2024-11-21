@@ -43,6 +43,7 @@ return new class extends Migration
             $table->integer('network_cells_3G');
             $table->integer('total_network_cells');
             $table->decimal('monthly_nur', $precision = 8, $scale = 2);
+            $table->string("office",50)->nullable();
             $table->timestamps();
         });
     }

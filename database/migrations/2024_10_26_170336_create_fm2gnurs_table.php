@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('problem_site_name', 300)->nullable();
             $table->integer('month');
             $table->decimal('monthly_nur', $precision = 8, $scale = 2);
+            $table->string("office",50)->nullable();
             $table->timestamps();
         });
     }

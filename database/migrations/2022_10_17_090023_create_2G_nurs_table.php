@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('2g-nurs', function (Blueprint $table) {
+        Schema::create('2g_nurs', function (Blueprint $table) {
             $table->id();
             $table->enum("work_group",["ALGAM","HLGAM","NLGAM"]);
             $table->string('Action_OGS_responsible')->nullable();
@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('problem_site_name', 300)->nullable();
             $table->integer('month');
             $table->decimal('monthly_nur', $precision = 8, $scale = 2);
+            $table->string("office",50)->nullable();
             $table->timestamps();
         });
     }

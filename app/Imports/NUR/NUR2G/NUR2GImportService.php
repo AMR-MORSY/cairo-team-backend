@@ -30,7 +30,8 @@ class NUR2GImportService{
             "operation zone" => ["string"],
             "generator owner"=>["nullable","regex:/^Shared|Orange|Rented$/"],
             "action ogs responsible"=>["nullable","string"],
-            "tt ogs responsible"=>['required',"regex:/^ALGAM|HLGAM|NLGAM$/"]
+            "tt ogs responsible"=>['required',"regex:/^ALGAM|HLGAM|NLGAM$/"],
+            "ntt office"=>['required_if:tt ogs responsible,HLGAM',"nullable", 'string']
 
 
 
@@ -89,6 +90,7 @@ class NUR2GImportService{
             "network_cells_2G"=>$technology_cells,
             "gen_owner"=> strtolower($row["generator owner"]) ,
             'monthly_nur' => $monthly_nur->calculate_monthly_nur(),
+            "office" => $row['ntt office']          
 
 
         ];

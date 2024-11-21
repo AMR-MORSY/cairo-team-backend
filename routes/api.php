@@ -48,8 +48,14 @@ Route::prefix("user")->middleware(['auth:sanctum'])->group(function(){
    
 
 });
+Route::prefix('admin')->middleware(['auth:sanctum'])->group(function(){
+    Route::get('/abilities',[AdminController::class,"userAbilities"]);
+
+});
+
 Route::prefix('admin')->group(function(){
     Route::post('/signUp',[AdminController::class,"adminLogin"]);
+    // Route::get('/abilities',[AdminController::class,"userAbilities"]);
   
 });
 Route::prefix('activities')->middleware(['auth:sanctum',"role:super-admin"])->group(function(){
@@ -63,7 +69,7 @@ Route::prefix('activities')->middleware(['auth:sanctum',"role:super-admin"])->gr
 
 Route::prefix('admin')->middleware(['auth:sanctum','role:admin|super-admin'])->group(function(){
     Route::post('/logout',[AdminController::class,"logout"]);
-    Route::get('/abilities',[AdminController::class,"userAbilities"]);
+  
     Route::get('/users',[AdminController::class,"users"]);
     Route::get('/user/{id}',[AdminController::class,"user"]);
     Route::get('/userwithrolesandpermissions/{id}',[AdminController::class,"userDataWithRolesAndPermissions"]);
@@ -160,7 +166,7 @@ Route::prefix('sites')->middleware((['auth:sanctum',"role:admin|super-admin"]))-
     Route::post('/nodals/download',[NodalsController::class,"exportNodals"]);
 
 });
-Route::prefix('sites')->middleware(['auth:sanctum',])->group(function(){
+Route::prefix('sites')->middleware(['auth:sanctum'])->group(function(){
     Route::get('/search/{search}',[NormalUsersSitesController::class,"search"])->name("search_sites");
     Route::get('/details/{siteCode}',[NormalUsersSitesController::class,"siteDetails"])->name("site_details");
 });

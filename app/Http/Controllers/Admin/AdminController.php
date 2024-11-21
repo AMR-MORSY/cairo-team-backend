@@ -22,17 +22,13 @@ class AdminController extends Controller
 
         $user = User::find(Auth::user()->id);
         if ($user) {
-             $perissions=[];
-            
-            if($user->hasRole('super-admin'))
-            {
-                 $perissions=Permission::all()->pluck('name');
+            $perissions = [];
 
-            }
-            else{
-               
-                 $perissions=$user->getAllPermissions()->pluck('name');
+            if ($user->hasRole('super-admin')) {
+                $perissions = Permission::all()->pluck('name');
+            } else {
 
+                $perissions = $user->getAllPermissions()->pluck('name');
             }
 
             return response()->json([
@@ -127,7 +123,7 @@ class AdminController extends Controller
             "name" => ["required", "exists:roles,name"],
             "rolePermissions" => ["required", "array"],
             "rolePermissions.*" => ["required", "exists:permissions,name"],
-           
+
 
         ]);
         if ($validator->fails()) {
@@ -262,12 +258,12 @@ class AdminController extends Controller
             $user = User::find($validated["id"]);
             $user->syncRoles($validated["roles"]);
             return response()->json([
-                "success"=>true
-            ],200);
+                "success" => true
+            ], 200);
         }
     }
-   
-   
+
+
     public function user($id)
     {
         $userData = $this->retrievUserData($id);

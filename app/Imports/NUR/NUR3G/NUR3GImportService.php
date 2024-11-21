@@ -16,15 +16,15 @@ class NUR3GImportService
 
         return [
 
-            "problem source site code" => ["required_if:tt ogs responsible,HLGAM", "nullable", 'string'],
+            "problem source site code" => ["required_if:to workgroup,HLGAM", "nullable", 'string'],
             "site name (node b)" => ["required", 'string'],
-            "problem source site name" => ["required_if:tt ogs responsible,HLGAM", "nullable", 'string'],
+            "problem source site name" => ["required_if:to workgroup,HLGAM", "nullable", 'string'],
             "rnc" => ["nullable", "regex:/^([0-9a-zA-Z_-]|\s){3,50}$/"],
             "no of cells" => ["required", "regex:/^([1-9][0-9]{0,2}|1000)$/"],
             'system' => ['required', 'string'],
             "sub system" => ['required', 'string'],
             "type" => ['required', "regex:/^Involuntary|Voluntary$/"],
-            'solution' => ["required_if:tt ogs responsible,HLGAM", "nullable", 'string'],
+            'solution' => ["required_if:to workgroup,HLGAM", "nullable", 'string'],
             "access problem" => ['required', 'boolean'],
             'force majeure' => ['nullable', 'boolean'],
             'force majeure type' => ['nullable', 'string'],
@@ -33,7 +33,8 @@ class NUR3GImportService
             "operation zone" => ["required", 'string'],
             "generator owner" => ["nullable", "regex:/^Shared|Orange|Rented$/"],
             "action ogs responsible" => ["nullable", "string"],
-            "to workgroup" => ['required', "regex:/^ALGAM|HLGAM|NLGAM$/"]
+            "to workgroup" => ['required', "regex:/^ALGAM|HLGAM|NLGAM$/"],
+            "ntt office"=>["required_if:to workgroup,HLGAM", "nullable", 'string']
 
 
         ];
@@ -92,7 +93,7 @@ class NUR3GImportService
             'Force_Majeure_type'=>$row['force majeure type'],
             'month'=>$month_as_number,
             'monthly_nur'=> $monthly_nur->calculate_monthly_nur(),
-            
+            "office" => $row['ntt office']          
 
         ];
     }
