@@ -151,6 +151,73 @@ class Instrument extends Model
             
         );
     }
+    protected function universities(): Attribute
+    {
+        return Attribute::make(
+           
+            get: function ( $value){
+                if($value==0)
+                {
+                    return "No";
+
+
+                }
+                else{
+                    return "Yes";
+                    
+                }
+
+            },
+            set: function ( $value){
+                if($value=="No" or $value==null)
+                {
+                    return 0;
+
+
+                }
+                else{
+                    return 1;
+                    
+                }
+
+            }
+            
+        );
+    }
+    protected function hotSpot(): Attribute
+    {
+        return Attribute::make(
+           
+            get: function ( $value){
+                if($value==0)
+                {
+                    return "No";
+
+
+                }
+                else{
+                    return "Yes";
+                    
+                }
+
+            },
+            set: function ( $value){
+                if($value=="No" or $value==null)
+                {
+                    return 0;
+
+
+                }
+                else{
+                    return 1;
+                    
+                }
+
+            }
+            
+        );
+    }
+
 
 
     protected function needAccessPermission(): Attribute

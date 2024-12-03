@@ -101,6 +101,8 @@ class ZoneNURHelpers
         return $oz;
     }
 
+   
+
     public static function zonesTopSitesNUR($zones, $allTickets)
     {
         $oz = [];

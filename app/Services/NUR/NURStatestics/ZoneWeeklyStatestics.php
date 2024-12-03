@@ -2,6 +2,7 @@
 
 namespace App\Services\NUR\NURStatestics;
 
+use App\Services\NUR\Durations;
 use App\Services\NUR\NURStatestics\ZoneNURHelpers;
 
 class ZoneWeeklyStatestics
@@ -94,6 +95,26 @@ class ZoneWeeklyStatestics
      
         $zonesRepeatedSites = ZoneNURHelpers::zonesRepeatedSites($allTickets->groupBy('oz')->keys(), $allTickets);
         return $zonesRepeatedSites;
+    }
+
+    public static function officesNUR($allTickets)
+    {
+        $officesTickets=$allTickets->groupBy('office');
+        $offices=[];
+        foreach($officesTickets as $office=>$tickets)
+        {
+            // $sub=[];
+            $offices[$office]['countTick']=$tickets->count();
+            $offices[$office]['NUR']= number_format($tickets->sum('nur_c'), 2, '.', ','); 
+            $offices[$office]['Avg_Dur']=intval($tickets->avg("Dur_min"));
+            // array_push($offices,$sub);
+
+        }
+        return $offices;
+     
+       
+
+
     }
 
     public static function zonesTopNUR($allTickets)

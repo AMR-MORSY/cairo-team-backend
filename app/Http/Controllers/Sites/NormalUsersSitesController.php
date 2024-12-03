@@ -147,16 +147,20 @@ class NormalUsersSitesController extends Controller
                     $newDirectCascades = [];
                     foreach ($directCascades as $cascade) {
                         $cascade_info=Site::where("site_code", $cascade["cascade_code"])->first();
-                        $cascade_category=$cascade_info->category;
-                        $cascade["category"]=$cascade_category;
-                        $nodal = Nodal::where("nodal_code", $cascade["cascade_code"])->first();
-                        if (isset($nodal)) {
-                            $CountCascades = $nodal->cascades->count();
-                            $cascade['countCascades'] = $CountCascades;
-                            array_push($newDirectCascades, $cascade);
-                        } else {
-                            array_push($newDirectCascades, $cascade);
+                        if(isset($cascade_info))/////if the cascade code does not exist in sites table
+                        {
+                            $cascade_category=$cascade_info->category;
+                            $cascade["category"]=$cascade_category;
+                            $nodal = Nodal::where("nodal_code", $cascade["cascade_code"])->first();
+                            if (isset($nodal)) {
+                                $CountCascades = $nodal->cascades->count();
+                                $cascade['countCascades'] = $CountCascades;
+                                array_push($newDirectCascades, $cascade);
+                            } else {
+                                array_push($newDirectCascades, $cascade);
+                            }
                         }
+                       
                     }
 
 

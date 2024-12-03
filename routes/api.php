@@ -119,9 +119,6 @@ Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Ad
 
 Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Admin|super-admin|admin'])->group(function(){
     Route::post("/delete",[ModificationsController::class,"deleteModification"])->name("delete_modification");
-});
-
-Route::prefix('modifications')->middleware(['auth:sanctum','role:Modification_Admin|admin|super-admin'])->group(function(){
     Route::post("/update",[ModificationsController::class,"modificationUpdate"])->name("modification_update");
     Route::post("/new",[ModificationsController::class,"newModification"])->name("new_modification");
 });
@@ -159,7 +156,7 @@ Route::prefix('sites')->middleware(['auth:sanctum',"role:super-admin"])->group(f
     Route::post('/nodals',[NodalsController::class,"importNodals"])->name("import_nodals");
    
     Route::post('/updateCascades',[CascadesController::class,"updateCascades"])->name("updateCascades");
-    Route::post('/update',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
+    Route::put('/update/{site:site_code}',[SuperAdminSitesController::class,"siteUpdate"])->name("siteUpdate");
     
 });
 Route::prefix('sites')->middleware((['auth:sanctum',"role:admin|super-admin"]))->group(function(){
@@ -206,7 +203,7 @@ Route::prefix('Nur')->middleware(['auth:sanctum','role:NUR_Viewer|admin|super-ad
 });
 
 
-Route::prefix("instruments")->middleware(['auth:sanctum','permission:read_Instrument_data'])->group(function(){
+Route::prefix("instruments")->middleware(['auth:sanctum','role:instrument_viewer|admin|super-admin'])->group(function(){
     Route::post('/siteBatteriesData',[InstrumentsController::class,"siteBatteriesData"]);
    
     Route::post('/siteRectifierData',[InstrumentsController::class,"siteRectifierData"]);

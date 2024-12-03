@@ -179,6 +179,7 @@ class ShowNURController extends Controller
                 $NUR["zonesSubsystem"] = ZoneWeeklyStatestics::zonesSubsystemNUR($allTickets);
                 $NUR["cairoSubsystem"]=CairoWeeklyStatestics::cairoSubsystem($allTickets);
                 $NUR["zonesSubsystemCountTickts"] = ZoneWeeklyStatestics::zonesSubsystemCountTickts($allTickets);
+                $NUR['officesNUR']=ZoneWeeklyStatestics::officesNUR($allTickets);
                 // $NUR["zonesResponseWithAccess"] = ZoneWeeklyStatestics::zonesResponseWithAccess($allTickets);
                 // $NUR["zonesResponseWithoutAccess"] = ZoneWeeklyStatestics::zonesResponseWithoutAccess($allTickets);
                 $NUR["zonesGeneratorStatestics"] = ZoneWeeklyStatestics::zonesGeneratorStatestics($allTickets);

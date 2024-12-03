@@ -539,8 +539,8 @@ class InstrumentsController extends Controller
                     "site_name" => $site->site_name,
                     "power_source" => $instrument->power_source,
                     "power_meter_type" => $instrument->power_meter_type,
-                    "power_cable_cross_sec" => $instrument->power_cable_cross_sec,
-                    "power_cable_length" => $instrument->power_cable_length,
+                    "gen_config" => $instrument->gen_config,
+                    "gen_serial" => $instrument->gen_serial,
                     "gen_capacity" => $instrument->gen_capacity,
                     "overhaul_power_consumption" => $instrument->overhaul_power_consumption,
 
@@ -560,11 +560,11 @@ class InstrumentsController extends Controller
         $this->authorize("update",Instrument::class);
         $validator = Validator::make($request->all(), [
             "id" => ['required', "exists:instruments,id"],
-            "power_source" =>['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
-            "power_meter_type" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
-            "power_cable_cross_sec" => ['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
-            "power_cable_length" =>['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
-            "gen_capacity" =>['nullable', 'max:50', 'regex:/^[a-zA-Z0-9 \/]+$/'],
+            "power_source" =>['nullable', 'max:50', 'string'],
+            "power_meter_type" => ['nullable', 'max:50', 'string'],
+            "gen_config" => ['nullable', 'max:50', 'string'],
+            "gen_serial" =>['nullable', 'max:50', 'string'],
+            "gen_capacity" =>['nullable', 'max:50', 'string'],
             "overhaul_power_consumption" =>['nullable', 'max:100000', 'integer'],
 
          
@@ -580,8 +580,8 @@ class InstrumentsController extends Controller
             if ($instrument) {
                 $instrument->power_source= $validated["power_source"];
                 $instrument->power_meter_type = $validated["power_meter_type"];
-                $instrument->power_cable_cross_sec = $validated["power_cable_cross_sec"];
-                $instrument->power_cable_length = $validated["power_cable_length"];
+                $instrument->gen_config = $validated["gen_config"];
+                $instrument->gen_serial = $validated["gen_serial"];
                 $instrument->gen_capacity=$validated["gen_capacity"];
                 $instrument->overhaul_power_consumption=$validated['overhaul_power_consumption'];
                 $instrument->save();
